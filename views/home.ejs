@@ -1,0 +1,19 @@
+<% include ./partials/header.ejs %>
+
+    <h1>Phrases Counter</h1>
+	<form action="/phrasesCounter" method="POST">
+		<table class="table">
+			<tr>
+				<td>
+					<textarea class="form-control" rows="20" name="keywordsList" placeholder="List of Keywords"></textarea>
+				</td>
+				<td>
+					<textarea class="form-control" rows="20" name="fullDescription" placeholder="Description"></textarea>
+				</td>
+			</tr>
+		</table>
+		
+		<button class="btn btn-success">Submit</button>
+	</form>
+
+<% include ./partials/footer.ejs %>

@@ -1,0 +1,23 @@
+<% include ./partials/header.ejs %>
+
+    <h1>Phrases Counter</h1>
+    <table class="table">
+    	<tr>
+		    <th>Keyword</th>
+		    <th>Apearences</th>
+		</tr>
+		<% for(var i=0; i<Object.keys(keyList).length; i++){ %>
+	    	<tr>
+	    	    <td>
+	    	        <%= Object.keys(keyList)[i] %>
+	    	    </td>
+	    	    <td>
+	    	        <%= keyList[Object.keys(keyList)[i]] %>
+	    	    </td>
+	    	</tr>
+		<% } %>
+    </table>
+    
+	
+
+<% include ./partials/footer.ejs %>
