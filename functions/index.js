@@ -109,7 +109,10 @@ functions.countedKeywordsDic = function(wordsList,doc){
     var c = 0;
     wordsList.forEach(function(word){
     	c = functions.countWordInPhrase(word, doc);
-        wordsDic[word] = c;
+    	if(c !== 0){
+    	    wordsDic[word] = c;
+    	}
+            
     });
     return wordsDic;
 }
