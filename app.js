@@ -19,8 +19,14 @@ app.use(methodOverride("_method"));
 
 //Home Route
 app.get("/", function(req,res){
-    res.render("home");    
+    res.render("phrasesCounter/index");    
 });
+
+//phrasesCounter INDEX page
+app.get("/", function(req,res){
+    res.render("phrasesCounter/index");    
+})
+
 
 //SHOW Keywords list counter
 app.post("/phrasesCounter", function(req,res){
@@ -30,7 +36,7 @@ app.post("/phrasesCounter", function(req,res){
     
     var keyList = functions.countKeywords(undelimitedList, desc);
     
-   res.render("show", {keyList:keyList}); 
+   res.render("phrases/Countershow", {keyList:keyList}); 
 });
 
 app.listen(process.env.PORT, process.env.IP, function(){
