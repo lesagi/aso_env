@@ -2,6 +2,7 @@ var express = require("express"),
 methodOverride      = require("method-override"),
 bodyParser          = require("body-parser"),
 functions           = require("./functions"),
+Regex = require("regex"),
 app = express();
 
 

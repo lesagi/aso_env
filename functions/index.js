@@ -1,9 +1,8 @@
 var express = require("express"),
-
-
-
+Regex = require("regex"),
 app = express();
 
+var regex = new RegExp();
 
 
 var functions = {};
@@ -73,40 +72,53 @@ functions.addedChars = function(word){
     }
 }
 
-functions.countWordInPhrase = function(word, phrase){
-	var phrase = phrase.toLowerCase();
-    var c = 0;
-    var fChar = 0;
-    var lChar = 0;
-    while (fChar < phrase.length) {
-    	if (phrase.charAt(fChar) === word.charAt(0)){
-            lChar = fChar + 1;
-            while (lChar < phrase.length){ 
-            	
-                if (phrase.substring(fChar,lChar) === word){
-                    if(lChar+1 <phrase.length){
-                        if(functions.addedChars(phrase.substring(fChar,lChar + 1))){
-                            c += 1;
-                            fChar = fChar + word.length-1;
-                            break;
-                        }
-                    } else {
-                        c += 1;
-                        break;
-                    }
-                    
-                	
-                } 
-                else if (lChar - fChar > word.length){
-                	break;
-                }
-            lChar += 1;
-        	}
-        }
-        fChar += 1;
-    }   
+functions.countWordInPhrase = function(word,phrase){
+    var c=0;
+    regex = ('\W',word,/\W/g);
+    var fChar = phrase.indexOf(word);
+    var subPhrase = phrase.slice(fChar);
+    
+    while (regex.test(subPhrase)){
+        c += 1;
+        subPhrase = subPhrase.slice((fChar+word.length));
+        fChar = subPhrase.indexOf(word);
+    }
     return c;
 }
+// functions.countWordInPhrase = function(word, phrase){
+// 	var phrase = phrase.toLowerCase();
+//     var c = 0;
+//     var fChar = 0;
+//     var lChar = 0;
+//     while (fChar < phrase.length) {
+//     	if (phrase.charAt(fChar) === word.charAt(0)){
+//             lChar = fChar + 1;
+//             while (lChar < phrase.length){ 
+            	
+//                 if (phrase.substring(fChar,lChar) === word){
+//                     if(lChar+1 <phrase.length){
+//                         if(functions.addedChars(phrase.substring(fChar,lChar + 1))){
+//                             c += 1;
+//                             fChar = fChar + word.length-1;
+//                             break;
+//                         }
+//                     } else {
+//                         c += 1;
+//                         break;
+//                     }
+                    
+                	
+//                 } 
+//                 else if (lChar - fChar > word.length){
+//                 	break;
+//                 }
+//             lChar += 1;
+//         	}
+//         }
+//         fChar += 1;
+//     }   
+//     return c;
+// }
 
 // count the times a word appears in a string and return a dictionary with the words as values and the number of appearence as their values
 functions.countedKeywordsDic = function(wordsList,doc){
