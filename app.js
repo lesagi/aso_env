@@ -28,7 +28,7 @@ app.use("/phrasesCounter", phrasesCounterRoutes);
 
 //Home Route
 app.get("/", function(req,res){
-    res.redirect("phrasesCounter/index");    
+    res.redirect("/phrasesCounter");    
 });
 
 // =====================
