@@ -10,7 +10,13 @@ var functions = {};
 
 functions.listToArray = function(text) {
 	// get line-by-line list and break into an array
-	var array = text.split('\n');
+	var array =[];
+	if(text.search(',') !== -1){
+	    array = text.split(',');
+	} else {
+	    array = text.split('\n');
+	}
+	
 
 	// itterate throught the array to remove spaces with jQuery trim function --> $.trim(singleWord)
 	// change all list to lowercase
@@ -123,6 +129,10 @@ functions.countKeywords = function(list, text){
 	array = functions.removeArrayDuplicates(array);
 	dic = functions.countedKeywordsDic(array, text);
 	return dic;
+}
+
+functions.replaceChar = function(text, fChar, dChar){
+    return text.split(fChar).join(dChar);
 }
 
 module.exports = functions;

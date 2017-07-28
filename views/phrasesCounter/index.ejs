@@ -1,17 +1,18 @@
 <% include ../partials/header.ejs %>
 
-    <h1>Phrases Counter</h1>
     <form class="container container-fluid" action="/phrasesCounter" method="POST">
+    	<h1>Phrases Counter</h1>
 		<div class="row">
 			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-				<textarea class="form-control" name="keywordsList" placeholder="List of Keywords" rows="20"></textarea>
+				<textarea class="form-control" name="keywordsList" placeholder="List of Keywords" rows="10"></textarea>
 			</div>
 			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-				<textarea class="form-control" name="fullDescription" placeholder="Description" rows="20"></textarea>
+				<textarea class="form-control" name="fullDescription" placeholder="Description" rows="10"></textarea>
 			</div>
 		</div>	
-		<input class="btn btn-success" type="submit" name="" value="Submit">
+		<input class="btn btn-success" type="submit" value="Submit">
 	</form>
+	
     	
 	
 <% include ../partials/footer.ejs %>

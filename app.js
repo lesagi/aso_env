@@ -8,10 +8,18 @@ app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-app.use(express.static(__dirname + "/public/css"));
-
-
+app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
+
+
+    
+//=================
+// ROUTES IMPORTING
+//=================
+
+var phrasesCounterRoutes         = require("./routes/phrasesCounter.js");
+app.use("/phrasesCounter", phrasesCounterRoutes);
+
 
 // =====================
 // Setting the routes
@@ -19,24 +27,16 @@ app.use(methodOverride("_method"));
 
 //Home Route
 app.get("/", function(req,res){
-    res.render("phrasesCounter/index");    
+    res.redirect("phrasesCounter/index");    
 });
 
-//phrasesCounter INDEX page
-app.get("/", function(req,res){
-    res.render("phrasesCounter/index");    
-})
+// =====================
+// COMMA SEPERATOR
+// =====================
 
-
-//SHOW Keywords list counter
-app.post("/phrasesCounter", function(req,res){
-    
-    var undelimitedList = req.body.keywordsList;
-    var desc = req.body.fullDescription;
-    
-    var keyList = functions.countKeywords(undelimitedList, desc);
-    
-   res.render("phrases/Countershow", {keyList:keyList}); 
+// SHOW COMMA SEPERATOR
+app.get("/commaSeperator", function(req,res){
+    res.render("commaSeperator/index");    
 });
 
 app.listen(process.env.PORT, process.env.IP, function(){

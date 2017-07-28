@@ -1,0 +1,21 @@
+<% include ../partials/header.ejs %>
+
+    
+    <div class="container container-fluid">
+        <h1>Comma Seperator</h1>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            	<textarea class="form-control" id="commaDelList" placeholder="Comma Seperated List" rows="10"></textarea>
+	            <input class="btn btn-success" id="toLineBtn" type="submit"  value="Submit">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            	<textarea class="form-control" id="lineDelList" placeholder="line-after-line List" rows="10"></textarea>
+	            <input class="btn btn-success" id="toCommaBtn" type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+    
+	
+    <script type="text/javascript" src="/scripts/commaSeperator.js"></script>
+	
+<% include ../partials/footer.ejs %>
