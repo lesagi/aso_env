@@ -39,39 +39,6 @@ functions.removeArrayDuplicates = function(array){
 	return cleanedArray;
 }
 
-
-
-
-functions.addedChars = function(word){
-    if (word.endsWith("!")){
-        return true;
-    }
-    else if (word.endsWith(",")){
-        return true;
-    }
-    else if (word.endsWith("+")){
-        return true;
-    }
-    else if (word.endsWith(".")){
-        return true;
-    }
-    else if (word.endsWith("?")){
-        return true;
-    }
-    else if (word.endsWith(" ")){
-        return true;
-    }
-    else if (word.endsWith(":")){
-        return true;
-    }
-    else if (word.endsWith("'")){
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
 functions.countWordInPhrase = function(word, phrase) {
   // Escape any characters in `word` that may have a special meaning
   // in regular expressions.
