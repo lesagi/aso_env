@@ -72,54 +72,27 @@ functions.addedChars = function(word){
     }
 }
 
-// functions.countWordInPhrase = function(word,phrase){
-//     var c=0;
-//     phrase = phrase.concat(" ");
-//     regex = (word,/\W/g);
-//     var fChar = phrase.indexOf(word);
-//     var subPhrase = phrase.slice(fChar);
-    
-//     while (regex.test(subPhrase)){
-//         c += 1;
-//         subPhrase = subPhrase.slice((fChar+word.length));
-//         fChar = subPhrase.indexOf(word);
-//     }
-//     return c;
-// }
+functions.countWordInPhrase = function(word, phrase) {
+  // Escape any characters in `word` that may have a special meaning
+  // in regular expressions.
+  // Taken from https://stackoverflow.com/a/6969486/4220785
+  word = word.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
 
-functions.countWordInPhrase = function(word, phrase){
-	var phrase = phrase.toLowerCase().concat(" ");
-    var c = 0;
-    var fChar = 0;
-    var lChar = 0;
-    while (fChar < phrase.length) {
-    	if (phrase.charAt(fChar) === word.charAt(0)){
-            lChar = fChar + 1;
-            while (lChar < phrase.length){ 
-            	
-                if (phrase.substring(fChar,lChar) === word){
-                    if(lChar+1 <phrase.length){
-                        if(functions.addedChars(phrase.substring(fChar,lChar + 1))){
-                            c += 1;
-                            fChar = fChar + word.length-1;
-                            break;
-                        }
-                    } else {
-                        c += 1;
-                        break;
-                    }
-                    
-                	
-                } 
-                else if (lChar - fChar > word.length){
-                	break;
-                }
-            lChar += 1;
-        	}
-        }
-        fChar += 1;
-    }   
-    return c;
+  // Replace any whitespace in `word` with `\s`, which matches any
+  // whitespace character, including line breaks.
+  word = word.replace(/\s+/g, '\\s')
+
+  // Create a regex with our `word` that will match it as long as it
+  // is surrounded by a word boundary (`\b`). A word boundary is any
+  // character that isn't part of a word, like whitespace or
+  // punctuation.
+  var regex = new RegExp('\\b' + word + '\\b', 'g')
+
+  // Get all of the matches for `phrase` using our new regex.
+  var matches = phrase.match(regex)
+
+  // If some matches were found, return how many. Otherwise, return 0.
+  return matches ? matches.length : 0
 }
 
 // count the times a word appears in a string and return a dictionary with the words as values and the number of appearence as their values
