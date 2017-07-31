@@ -1,5 +1,6 @@
 var express = require("express"),
 Regex = require("regex"),
+request = require("request"),
 app = express();
 
 var regex = new RegExp();
@@ -128,5 +129,60 @@ functions.textToArr = function(text){
 	}
 	return arr;
 }
+
+functions.preventRep = function(a, b, c, d){
+	//identify how many keywords
+		//if four...
+		if(d){
+			//if (d!==b, d!==c) return true
+			if(d!==b && d!==c) return true;
+			// else return false
+			else return false;
+		}
+		if(c){
+			//if (c!==b, c!==a) return true
+			if(c!==b && c!==a) return true;
+			// else return false
+			else return false;
+			
+		}
+		if(b){
+			//if (a!==b) return true
+			if(a!==b) return true;
+			// else return false
+			else return false;		
+		}
+		//return true;
+		return true;
+}
+
+
+
+
+
+functions.createPhrases = function(arr){
+	arr.forEach(function(a){
+		console.log(a);
+		arr.forEach(function(b){
+			if(functions.preventRep(a, b)){
+				console.log(a + " " + b);
+				arr.forEach(function(c){
+					if (functions.preventRep(a, b, c)){
+						console.log(a + " " + b + " " + c);
+						arr.forEach(function(d){
+							if(functions.preventRep(a, b, c, d)){
+								console.log(a + " " + b + " " + c + " " + d);
+							}
+						});
+					}
+					
+				});
+			}
+			
+		});
+	});
+}
+
+
 
 module.exports = functions;

@@ -17,16 +17,24 @@
     <div class="container container-fluid">
     	<table class="table table-bordered table-hover">
 	    	<tr class="row">
-			    <th class="col-xs-6">Keyword</th>
-			    <th class="col-xs-6">Apearences</th>
+			    <th class="col-lg-1 col-xs-4"></th>
+			    <th class="col-lg-5 col-xs-4">Keyword</th>
+			    <th class="col-lg-3 col-xs-4">Apearences</th>
+			    <th class="col-lg-3 col-xs-4">Density</th>
 			</tr>
 			<% for(var i=0; i<Object.keys(keyList).length; i++){ %>
 		    	<tr class="row">
-		    	    <td class="col-xs-6">
+		    		<td class="col-lg-1 col-xs-4">
+		    	        <input type="checkbox" class="pull-right"></input>
+		    	    </td>
+		    	    <td class="col-lg-5 col-xs-4">
 		    	        <%= Object.keys(keyList)[i] %>
 		    	    </td>
-		    	    <td class="col-xs-6">
+		    	    <td class="col-lg-3 col-xs-4">
 		    	        <%= keyList[Object.keys(keyList)[i]] %>
+		    	    </td>
+		    	    <td class="col-lg-3 col-xs-4">
+		    	        <%= (keyList[Object.keys(keyList)[i]]/descLen*100).toFixed(2); %>%
 		    	    </td>
 		    	</tr>
 			<% } %>

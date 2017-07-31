@@ -2,6 +2,7 @@ var express = require("express"),
 methodOverride      = require("method-override"),
 bodyParser          = require("body-parser"),
 functions           = require("./functions"),
+request             = require("request"),
 Regex = require("regex"),
 app = express();
 
@@ -18,8 +19,11 @@ app.use(methodOverride("_method"));
 // ROUTES IMPORTING
 //=================
 
-var phrasesCounterRoutes         = require("./routes/phrasesCounter.js");
+var phrasesCounterRoutes         = require("./routes/phrasesCounter.js"),
+wordExecRoutes                  = require("./routes/wordExec.js");
+
 app.use("/phrasesCounter", phrasesCounterRoutes);
+app.use("/wordExec", wordExecRoutes);
 
 
 // =====================
@@ -40,19 +44,6 @@ app.get("/commaSeperator", function(req,res){
     res.render("commaSeperator/index");    
 });
 
-
-// =====================
-// WORD EXTRACTOR
-// =====================
-
-app.get("/wordExec", function(req, res){
-   res.render("wordExec/index"); 
-});
-
-app.post("/wordExec",function(req, res){
-   var arr = functions.textToArr(req.body.text);
-   res.render("wordExec/show", {arr:arr});
-});
 
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("Server is running");
