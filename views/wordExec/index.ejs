@@ -1,0 +1,14 @@
+<% include ../partials/header.ejs %>
+
+    
+    <div class="container container-fluid">
+        <h1>Word Extractor</h1>
+        <form class="row" action="/wordExec" method="POST">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            	<textarea class="form-control" name="text" placeholder="Enter your text here..." rows="10"></textarea>
+	            <input class="btn btn-success" id="extract" type="submit"  value="Submit">
+            </div>
+        </form>
+    </div>
+	
+<% include ../partials/footer.ejs %>

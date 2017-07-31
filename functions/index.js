@@ -7,6 +7,17 @@ var regex = new RegExp();
 
 var functions = {};
 
+
+functions.cleanArray = function(array){
+    // itterate throught the array to remove spaces with jQuery trim function --> $.trim(singleWord)
+	// change all list to lowercase
+	for(var i=0; i<array.length; i++){
+		array[i] = array[i].trim();
+		array[i] = array[i].toLowerCase();
+	}
+	return array;
+}
+
 functions.listToArray = function(text) {
 	// get line-by-line list and break into an array
 	var array =[];
@@ -15,16 +26,7 @@ functions.listToArray = function(text) {
 	} else {
 	    array = text.split('\n');
 	}
-	
-
-	// itterate throught the array to remove spaces with jQuery trim function --> $.trim(singleWord)
-	// change all list to lowercase
-	for(var i=0; i<array.length; i++){
-		array[i] = array[i].trim();
-		array[i] = array[i].toLowerCase();
-	}
-
-	return array
+	return functions.cleanArray(array);
 }
 
 // Remove duplicates in arrray
@@ -43,23 +45,23 @@ functions.countWordInPhrase = function(word, phrase) {
   // Escape any characters in `word` that may have a special meaning
   // in regular expressions.
   // Taken from https://stackoverflow.com/a/6969486/4220785
-  word = word.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
+  word = word.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 
   // Replace any whitespace in `word` with `\s`, which matches any
   // whitespace character, including line breaks.
-  word = word.replace(/\s+/g, '\\s')
+  word = word.replace(/\s+/g, '\\s');
 
   // Create a regex with our `word` that will match it as long as it
   // is surrounded by a word boundary (`\b`). A word boundary is any
   // character that isn't part of a word, like whitespace or
   // punctuation.
-  var regex = new RegExp('\\b' + word + '\\b', 'g')
+  var regex = new RegExp('\\b' + word + '\\b', 'gi');
 
   // Get all of the matches for `phrase` using our new regex.
-  var matches = phrase.match(regex)
-
+  var matches = phrase.match(regex);
+  
   // If some matches were found, return how many. Otherwise, return 0.
-  return matches ? matches.length : 0
+  return matches ? matches.length : 0;
 }
 
 // count the times a word appears in a string and return a dictionary with the words as values and the number of appearence as their values
@@ -87,6 +89,44 @@ functions.countKeywords = function(list, text){
 
 functions.replaceChar = function(text, fChar, dChar){
     return text.split(fChar).join(dChar);
+}
+
+//textToArray - the function get bunch of text and compile an array with each word as an object in the array
+functions.getFirstWord = function(text) {
+	var fChar = 0;
+	var lChar = 0;
+
+	//Create regex with a pattern of any Word-Character or geresh(')
+  var regex = new RegExp();
+  regex = /(?:(\w|'))/i;
+  text = text.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+
+ 		//Going over the text until matches a char that doesn't meet the requirements above
+		while (!regex.test(text.charAt(fChar))){
+			fChar++;
+		}
+
+		lChar = fChar;
+		while (regex.test(text.charAt(lChar))){
+			lChar++;
+		}
+		var word = text.substring(fChar,lChar);
+		fChar = lChar;
+
+  return  word
+}
+
+
+functions.textToArr = function(text){
+	var regex = new RegExp();
+	regex = /(?:(\w|'))/i;
+	var arr=[];
+	while(regex.test(text)){
+		var word = functions.getFirstWord(text);
+		arr.push(word);
+		text = text.slice(text.search(regex)+word.length);
+	}
+	return arr;
 }
 
 module.exports = functions;
