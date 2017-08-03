@@ -15,3 +15,10 @@ textarea {
     width: 40%;
     margin: auto;
 }
+
+.well{
+    width: 100%;
+    resize: none;
+    padding: 10px;
+}
+

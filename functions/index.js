@@ -89,7 +89,6 @@ functions.countKeywords = function(list, text){
 }
 
 functions.replaceChar = function(text, fChar, dChar){
-	console.log("we got ot function");
     return text.split(fChar).join(dChar);
 }
 
@@ -200,7 +199,6 @@ functions.sortAppByOS = function(appObj){
 }
 
 functions.getAppListByURL = function(url){
-    console.log(url);
     var appLists = {};
     request(url, function(err, res, body){
         if(res.statusCode==200){

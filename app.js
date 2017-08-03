@@ -54,11 +54,6 @@ app.get("/apiCreator", function(req,res){
 });
 
 app.post("/apiCreator", function(req, res){
-    console.log(req.body.app.os);
-    console.log(req.body.app.name);
-    console.log(req.body.app.country);
-    console.log(appLists);
-    console.log(appLists[appName]);
    var os = req.body.app.os;
    var appName = req.body.app.name;
    var appId = appLists[os][appName];

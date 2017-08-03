@@ -6,7 +6,7 @@
         <form action="/apiCreator" method="POST">
             <div class="row">
                 <div class="col-lg-12">
-                    <label> App Name: </label>
+                    <label>App Name: </label>
                         <select id="andl" name="app[name]" class="btn btn-default dropdown-toggle" placeholder="Choose an app...">
                             <option value="">Choose OS to see a list of apps</option>
                         </select>
@@ -14,7 +14,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-6">
-                    <label> Country: </label>
+                    <label>Country: </label>
                         <select id="countryField" name="app[country]" class="btn btn-default dropdown-toggle" placeholder="Choose an app...">
                           <option value="BR">BR</option>
                           <option value="DE">DE</option>
@@ -24,8 +24,9 @@
                         </select>
                 </div>
                 <div class="col-lg-6">
-                    <label> OS: </label>
+                    <label>OS: </label>
                         <select id="osdl" name="app[os]" class="btn btn-default dropdown-toggle" onchange="configureDropDownLists(this,document.getElementById('andl'))" placeholder="Choose OS">
+                        	<option value="">Choose OS</option>
                         	<option value="iOS">iOS</option>
                         	<option value="Android">Android</option>
                     	</select>
