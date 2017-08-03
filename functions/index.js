@@ -89,6 +89,7 @@ functions.countKeywords = function(list, text){
 }
 
 functions.replaceChar = function(text, fChar, dChar){
+	console.log("we got ot function");
     return text.split(fChar).join(dChar);
 }
 
@@ -156,10 +157,6 @@ functions.preventRep = function(a, b, c, d){
 		return true;
 }
 
-
-
-
-
 functions.createPhrases = function(arr){
 	arr.forEach(function(a){
 		console.log(a);
@@ -183,6 +180,39 @@ functions.createPhrases = function(arr){
 	});
 }
 
+functions.sortAppByOS = function(appObj){
+    var regex = new RegExp();
+	regex = /(?:(\D))/i;
+    var iOS = {};
+    var android = {};
+    appObj = appObj["data"];
+   
+    for(var id in appObj) {
+        var appName = appObj[id].appName;
+        var mobileActionID = appObj[id].appId;
+        if(regex.test(id)){
+            android[appName] = mobileActionID;
+        } else {
+            iOS[appName] = mobileActionID;
+        }
+    }
+    return {"iOS":iOS, "android":android};
+}
 
+functions.getAppListByURL = function(url){
+    console.log(url);
+    var appLists = {};
+    request(url, function(err, res, body){
+        if(res.statusCode==200){
+            var parsedData = JSON.parse(body);
+            var apps = functions.sortAppByOS(parsedData);
+            appLists = {"iOS":apps["iOS"], "android":apps["android"]};
+        } else {
+            console.log("err");
+            console.log(err);
+        }
+    });
+    return appLists;
+}
 
 module.exports = functions;

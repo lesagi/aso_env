@@ -1,75 +1,53 @@
-var express = require("express"),
-methodOverride      = require("method-override"),
-bodyParser          = require("body-parser"),
-functions           = require("./functions"),
-request             = require("request"),
+// var $ = require('jQuery'); 
+// global.jQuery = $; 
+// var jsdom = require("jsdom").jsdom;
+// jsdom.env("", function(err, window) {
+//     if (err) {
+//        console.error(err);
+//        return;
+//     }
+//     global.$ = require("jquery")(window);
+// })
 
-Regex = require("regex"),
-app = express();
-
-
-
-app.use(bodyParser.urlencoded({extended: true}));
-app.set("view engine", "ejs");
-app.use(express.static(__dirname + "/public"));
-app.use(methodOverride("_method"));
-
-
-    
-//=================
-// ROUTES IMPORTING
-//=================
-
-var phrasesCounterRoutes         = require("./routes/phrasesCounter.js"),
-wordExecRoutes                  = require("./routes/wordExec.js");
-
-app.use("/phrasesCounter", phrasesCounterRoutes);
-app.use("/wordExec", wordExecRoutes);
+var osField = document.getElementById("osField");
+var appField = document.getElementById("appField"); 
+var form = document.querySelector("form");
 
 
-// =====================
-// Setting the routes
-// =====================
 
-//Home Route
-app.get("/", function(req,res){
-    res.redirect("/phrasesCounter");    
-});
+function configureDropDownLists(osdl,andl) {
+    var android = appLists["android"];
+    var ios = appLists["iOS"];
 
-// =====================
-// COMMA SEPERATOR
-// =====================
+    switch (osdl.value) {
+        case 'Android':
+            andl.options.length = 0;
+            for (var appName in android) {
+                createOption(andl, appName, appName);
+            }
+            break;
+        case 'iOS':
+            andl.options.length = 0; 
+        	for (var appName in ios) {
+            createOption(andl, appName, appName);
+            }
+            break;
+            default:
+                andl.options.length = 0;
+            break;
+    }
 
-// SHOW COMMA SEPERATOR
-app.get("/commaSeperator", function(req,res){
-    res.render("commaSeperator/index");    
-});
+}
 
-// =====================
-// API Link Creator
-// =====================
-
-app.get("/apiCreator", function(req,res){
-   res.render("API/index"); 
-});
-
-app.post("/apiCreator", function(req, res){
-    console.log(req.body.app.os);
-    console.log(req.body.app.name);
-    console.log(req.body.app.country);
-    console.log(appLists);
-    console.log(appLists[appName]);
-   var os = req.body.app.os;
-   var appName = req.body.app.name;
-   var appId = appLists[os][appName];
-   res.render("API/show", {appId:appId, country:req.body.app.country})
-   
-});
+function createOption(ddl, text, value) {
+    var opt = document.createElement('option');
+    opt.value = value;
+    opt.text = text;
+    ddl.options.add(opt);
+}
 
 
-app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("Server is running");
-});
+//var appLists = functions.getAppListByURL("https://api.mobileaction.co/apps/?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28");
 
 
 var appLists = { iOS: 
@@ -156,7 +134,7 @@ var appLists = { iOS:
      MrOwl: 358786,
      'The Google Assistant -- get help anytime, anywhere': 360020,
      'Мой Женский Календарь': 362841 },
-  Android: 
+  android: 
    { 'Karaoke Sing & Record': 343704,
      'Bubble Genius - Popping Game!': 332997,
      'Spotify Music': 334701,

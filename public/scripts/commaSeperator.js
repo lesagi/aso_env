@@ -1,3 +1,10 @@
+
+
+// var functions = require(".././functions");
+
+
+
+
 function replaceChar(text, fChar, dChar){
     return text.split(fChar).join(dChar);
 }
@@ -16,3 +23,5 @@ toCommaBtn.addEventListener("click", function(){
 	var text = lineField.value;
 	commaField.value = replaceChar(text,"\n",",");
 });
+
+

@@ -5,3 +5,13 @@ textarea {
 .btn {
     margin-bottom: 20px;
 }
+
+
+.btn.btn-default.dropdown-toggle {
+    width:100%;
+}
+
+#apiCreateForm {
+    width: 40%;
+    margin: auto;
+}

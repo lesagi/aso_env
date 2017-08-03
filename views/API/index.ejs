@@ -1,0 +1,44 @@
+<% include ../partials/header.ejs %>
+    
+    
+    <div class="container container-fluid">
+        <h1>API Link Creator</h1>
+        <form action="/apiCreator" method="POST">
+            <div class="row">
+                <div class="col-lg-12">
+                    <label> App Name: </label>
+                        <select id="andl" name="app[name]" class="btn btn-default dropdown-toggle" placeholder="Choose an app...">
+                            <option value="">Choose OS to see a list of apps</option>
+                        </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <label> Country: </label>
+                        <select id="countryField" name="app[country]" class="btn btn-default dropdown-toggle" placeholder="Choose an app...">
+                          <option value="BR">BR</option>
+                          <option value="DE">DE</option>
+                          <option value="FR">FR</option>
+                          <option value="GB">GB</option>
+                          <option value="US">US</option>
+                        </select>
+                </div>
+                <div class="col-lg-6">
+                    <label> OS: </label>
+                        <select id="osdl" name="app[os]" class="btn btn-default dropdown-toggle" onchange="configureDropDownLists(this,document.getElementById('andl'))" placeholder="Choose OS">
+                        	<option value="iOS">iOS</option>
+                        	<option value="Android">Android</option>
+                    	</select>
+                </div>
+            </div>
+            <input class="btn btn-success" id="extract" type="submit"  value="Submit">
+        </form>
+    </div>
+    
+    
+    
+    
+	<script type="text/javascript" src="/scripts/apiCreator.js"></script>
+	
+	
+<% include ../partials/footer.ejs %>
