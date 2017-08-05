@@ -57,7 +57,7 @@ app.post("/apiCreator", function(req, res){
    var os = req.body.app.os;
    var appName = req.body.app.name;
    var appId = appLists[os][appName];
-   res.render("API/show", {appId:appId, country:req.body.app.country})
+   res.render("API/show", {appId:appId, country:req.body.app.country, appName:appName, os:os})
    
 });
 
