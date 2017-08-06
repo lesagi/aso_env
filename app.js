@@ -50,15 +50,7 @@ app.get("/commaSeperator", function(req,res){
 // =====================
 
 app.get("/apiCreator", function(req,res){
-   res.render("API/index"); 
-});
-
-app.post("/apiCreator", function(req, res){
-   var os = req.body.app.os;
-   var appName = req.body.app.name;
-   var appId = appLists[os][appName];
-   res.render("API/show", {appId:appId, country:req.body.app.country, appName:appName, os:os})
-   
+   res.render("API/index",{appLists:appLists}); 
 });
 
 

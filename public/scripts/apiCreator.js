@@ -15,25 +15,25 @@ var form = document.querySelector("form");
 
 
 
-function configureDropDownLists(osdl,andl) {
-    var android = appLists["android"];
+function configureDropDownLists(OpSysDropList,appNameDropList) {
+    var android = appLists["Android"];
     var ios = appLists["iOS"];
 
-    switch (osdl.value) {
+    switch (OpSysDropList.value) {
         case 'Android':
-            andl.options.length = 0;
+            appNameDropList.options.length = 0;
             for (var appName in android) {
-                createOption(andl, appName, appName);
+                createOption(appNameDropList, appName, appName);
             }
             break;
         case 'iOS':
-            andl.options.length = 0; 
+            appNameDropList.options.length = 0; 
         	for (var appName in ios) {
-            createOption(andl, appName, appName);
+            createOption(appNameDropList, appName, appName);
             }
             break;
             default:
-                andl.options.length = 0;
+                appNameDropList.options.length = 0;
             break;
     }
 
@@ -46,6 +46,24 @@ function createOption(ddl, text, value) {
     ddl.options.add(opt);
 }
 
+function buildLink(){
+	var apiLink = document.querySelector("#apiLink");
+	var appName = document.querySelector("#appNameDropList");
+	var os = document.querySelector("#OpSysDropList");
+	var country = document.querySelector("#countryField");
+	apiLink.value= "https://api.mobileaction.co/keywords/"+ getAppId(appName.value,os.value)+"/" +country.value+ "?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28";
+	
+	// Edit the label to the text appear
+	var apiLabel=document.querySelector("label[for=apiLink]");
+	apiLabel.innerText = "API Link:"
+	
+	// make the well visible
+	apiLink.classList.add("well");
+}
+
+function getAppId(name,os){
+	return appLists[os][name];
+}
 
 
 //var appLists = functions.getAppListByURL("https://api.mobileaction.co/apps/?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28");
@@ -135,7 +153,7 @@ var appLists = { iOS:
      MrOwl: 358786,
      'The Google Assistant -- get help anytime, anywhere': 360020,
      'Мой Женский Календарь': 362841 },
-  android: 
+  Android: 
    { 'Karaoke Sing & Record': 343704,
      'Bubble Genius - Popping Game!': 332997,
      'Spotify Music': 334701,

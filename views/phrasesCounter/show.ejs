@@ -25,7 +25,7 @@
 			<% for(var i=0; i<Object.keys(keyList).length; i++){ %>
 		    	<tr class="row">
 		    		<td class="col-lg-1 col-xs-4">
-		    	        <input type="checkbox" class="pull-right"></input>
+		    	        <input type="checkbox" class="pull-right"><%= Object.keys(keyList)[i] %></input>
 		    	    </td>
 		    	    <td class="col-lg-5 col-xs-4">
 		    	        <%= Object.keys(keyList)[i] %>
