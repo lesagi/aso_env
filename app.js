@@ -3,7 +3,7 @@ methodOverride      = require("method-override"),
 bodyParser          = require("body-parser"),
 functions           = require("./functions"),
 request             = require("request"),
-mongoose            = require("mongoose"),
+// mongoose            = require("mongoose"),
 Keyword             = require("./models/keyword.js"),
 Regex = require("regex"),
 app = express();
@@ -15,7 +15,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 
-mongoose.connect("mongodb://localhost/aso_env");
+// mongoose.connect("mongodb://localhost/aso_env");
     
 //=================
 // ROUTES IMPORTING
@@ -58,55 +58,55 @@ app.get("/apiCreator", function(req,res){
 // Keyword Presentation
 // =====================
 
-app.get("/specificKey", function(req,res){
-   Keyword.find({},function(err,allKeywords){
-       if (err){
-           console.log(err);
-       } else {
-           res.render("specificKey/index", {allKeywords:allKeywords})
-       }
+// app.get("/specificKey", function(req,res){
+//   Keyword.find({},function(err,allKeywords){
+//       if (err){
+//           console.log(err);
+//       } else {
+//           res.render("specificKey/index", {allKeywords:allKeywords})
+//       }
        
-   });
-});
+//   });
+// });
 
-app.get("/specificKey/:id", function(req,res){
-    // use the id to find the specific keyword in the database
-    Keyword.findById(req.params.id, function(err,keyword){
-        if(err){
-            console.log(err);
-        } else { //render the show page along with the required params
-            res.render("specificKey/show",{historyData:keyword.updates, term:keyword.term})
-        }
-    });
-});
+// app.get("/specificKey/:id", function(req,res){
+//     // use the id to find the specific keyword in the database
+//     Keyword.findById(req.params.id, function(err,keyword){
+//         if(err){
+//             console.log(err);
+//         } else { //render the show page along with the required params
+//             res.render("specificKey/show",{historyData:keyword.updates, term:keyword.term})
+//         }
+//     });
+// });
 
 
-app.post("/specificKey/:id", function(req,res){
-    console.log(req.body.term);
-    Keyword.findOne({term: req.body.term},function(err, keyword){
-        if (err){
-            console.log(err);
-        } else {
-            res.render("specificKey/show",{historyData:keyword.updates, term:keyword.term})
-            keyword["updates"].forEach(function(el){
-              if(el.date =="Sun Aug 06 2017 00:00:00 GMT+0000 (UTC)"){
-                  console.log(el.traffic);
-              } else {
-                  console.log("nothing");
-              }
-            });
+// app.post("/specificKey/:id", function(req,res){
+//     console.log(req.body.term);
+//     Keyword.findOne({term: req.body.term},function(err, keyword){
+//         if (err){
+//             console.log(err);
+//         } else {
+//             res.render("specificKey/show",{historyData:keyword.updates, term:keyword.term})
+//             keyword["updates"].forEach(function(el){
+//               if(el.date =="Sun Aug 06 2017 00:00:00 GMT+0000 (UTC)"){
+//                   console.log(el.traffic);
+//               } else {
+//                   console.log("nothing");
+//               }
+//             });
             
-            // Adding info of the keywords for a specific date to the array
-            // by finding the keywords with the id, specifiying 'updates' key and push
-            // the 'newData' set to the array
-            // keyword.updates.push(newData);
-            // keyword.save();
-        }
-    });
+//             // Adding info of the keywords for a specific date to the array
+//             // by finding the keywords with the id, specifiying 'updates' key and push
+//             // the 'newData' set to the array
+//             // keyword.updates.push(newData);
+//             // keyword.save();
+//         }
+//     });
    
-});
+// });
 
-app.get("/specificKey/:id/edit")
+// app.get("/specificKey/:id/edit")
 
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("Server is running");
@@ -154,10 +154,9 @@ function updateKeyword(term,traffic,difficulty,competition){
             keyword.save();
         }
     });
-            
-            
 }
 
+// Update s data of a specific term, and for a specific date.
 Keyword.findOne({term:"hello"},function(err,foundKeyword){
     var givenDate = new Date('2017-08-28').toDateString();
   if (err){
@@ -174,6 +173,7 @@ Keyword.findOne({term:"hello"},function(err,foundKeyword){
   }
 });
 
+
     // Keyword.findOneAndUpdate(
     //     { term: "hello", "updates.$.date":"Mon Aug 28 2017 07:16:33 GMT+0000 (UTC)"},
     //     { $set: { "updates.$.traffic":5 }},
@@ -185,7 +185,6 @@ Keyword.findOne({term:"hello"},function(err,foundKeyword){
     //         }
     //     }
     // );
-
 
 // updateKeyword("hello",5.2,4.0,220);
 // createKey("hello",4.6,8.4,256);
