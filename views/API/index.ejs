@@ -11,7 +11,8 @@
                     <label for="OpSysDropList"> OS: </label>
                     <div class="row">
                         <div class="col-lg-12">
-                            <select id="OpSysDropList" name="os" class="btn btn-default dropdown-toggle" onchange="configureDropDownLists(this,document.getElementById('appNameDropList'))">
+                            <select id="OpSysDropList" name="os" class="btn btn-default dropdown-toggle" onchange="configureDropDownLists(this,document.getElementById('appNameDropList'))" placeholder="iOS">
+                            	<option value="">Please select Operation System</option>
                             	<option value="iOS">iOS</option>
                             	<option value="Android">Android</option>
                         	</select>

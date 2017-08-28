@@ -1,23 +1,19 @@
-// var $ = require('jQuery'); 
-// global.jQuery = $; 
-// var jsdom = require("jsdom").jsdom;
-// jsdom.env("", function(err, window) {
-//     if (err) {
-//        console.error(err);
-//        return;
-//     }
-//     global.$ = require("jquery")(window);
-// })
-
+// var Application = require(".././models/application.js");
 var osField = document.getElementById("osField");
 var appField = document.getElementById("appField"); 
 var form = document.querySelector("form");
 
-
+// Application.create({},function(err,app){
+//     if(err){
+//         console.log(err)
+//     } else {
+        
+//     }
+// });
 
 function configureDropDownLists(OpSysDropList,appNameDropList) {
-    var android = appLists["Android"];
-    var ios = appLists["iOS"];
+    var android = appsList["Android"];
+    var ios = appsList["iOS"];
 
     switch (OpSysDropList.value) {
         case 'Android':
@@ -62,14 +58,14 @@ function buildLink(){
 }
 
 function getAppId(name,os){
-	return appLists[os][name];
+	return appsList[os][name];
 }
 
 
-//var appLists = functions.getAppListByURL("https://api.mobileaction.co/apps/?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28");
+//var appsList = functions.getAppListByURL("https://api.mobileaction.co/apps/?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28");
 
 
-var appLists = { iOS: 
+var appsList = { iOS: 
    { 'PayPal - Send and request money safely': 359792,
      'Yelp - Nearby Restaurants, Shopping & Services': 367074,
      'Shazam - Discover music, artists, videos & lyrics': 361633,

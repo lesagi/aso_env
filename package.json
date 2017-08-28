@@ -16,6 +16,7 @@
     "jQuery": "^1.7.4",
     "jsdom": "^11.1.0",
     "method-override": "^2.3.9",
+    "mongoose": "^4.10.8",
     "regex": "^0.1.1",
     "request": "^2.81.0"
   }

@@ -17,11 +17,13 @@
 			    <th class="col-xs-6">Keyword</th>
 			</tr>
 			<% for(var i=0; i<arr.length; i++){ %>
-		    	<tr class="row">
-		    	    <td class="col-xs-12">
-		    	        <%= arr[i] %>
-		    	    </td>
-		    	</tr>
+				<% if(arr[i].length>1){ %>
+					<tr class="row">
+			    	    <td class="col-xs-12">
+			    	        <%= arr[i] %>
+			    	    </td>
+			    	</tr>
+				<% } %>
 			<% } %>
     	</table>
     </div>

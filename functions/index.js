@@ -19,7 +19,7 @@ functions.cleanArray = function(array){
 	return array;
 }
 
-functions.listToArray = function(text) {
+functions.lineByLineToArray = function(text) {
 	// get line-by-line list and break into an array
 	var array =[];
 	if(text.search(',') !== -1){
@@ -82,7 +82,7 @@ functions.countedKeywordsDic = function(wordsList,doc){
 
 functions.countKeywords = function(list, text){
 	var dic = {};
-	var array = functions.listToArray(list);
+	var array = functions.lineByLineToArray(list);
 	array = functions.removeArrayDuplicates(array);
 	dic = functions.countedKeywordsDic(array, text);
 	return dic;
@@ -131,7 +131,7 @@ functions.textToArr = function(text){
 }
 
 functions.preventRep = function(a, b, c, d){
-	//identify how many keywords
+	//identify how many keywords were given as parameters
 		//if four...
 		if(d){
 			//if (d!==b, d!==c) return true
@@ -212,5 +212,7 @@ functions.getAppListByURL = function(url){
     });
     return appLists;
 }
+
+
 
 module.exports = functions;
