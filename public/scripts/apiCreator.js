@@ -1,32 +1,30 @@
-// var Application = require(".././models/application.js");
+
 var osField = document.getElementById("osField");
 var appField = document.getElementById("appField"); 
 var form = document.querySelector("form");
 
-// Application.create({},function(err,app){
-//     if(err){
-//         console.log(err)
-//     } else {
-        
-//     }
-// });
+
 
 function configureDropDownLists(OpSysDropList,appNameDropList) {
     var android = appsList["Android"];
     var ios = appsList["iOS"];
-
+    var appsArr = [];
     switch (OpSysDropList.value) {
         case 'Android':
             appNameDropList.options.length = 0;
-            for (var appName in android) {
-                createOption(appNameDropList, appName, appName);
-            }
+            appsArr = appNamesListToArray(android);
+            appsArr = appsArr.sort();
+            appsArr.forEach(function(appName){
+               createOption(appNameDropList, appName, appName); 
+            });
             break;
         case 'iOS':
             appNameDropList.options.length = 0; 
-        	for (var appName in ios) {
-            createOption(appNameDropList, appName, appName);
-            }
+        	appsArr = appNamesListToArray(ios);
+            appsArr = appsArr.sort();
+            appsArr.forEach(function(appName){
+               createOption(appNameDropList, appName, appName); 
+            });
             break;
             default:
                 appNameDropList.options.length = 0;
@@ -64,6 +62,16 @@ function getAppId(name,os){
 
 //var appsList = functions.getAppListByURL("https://api.mobileaction.co/apps/?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28");
 
+// get the app list from MA (only MA, any other service provider 
+// will require refactoring this code), and return the apps names
+// in an array
+function appNamesListToArray(list){
+	var arr =[];
+	for (var appName in list) {
+        arr.push(appName);
+    }
+    return arr;
+}
 
 var appsList = { iOS: 
    { 'PayPal - Send and request money safely': 359792,

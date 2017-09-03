@@ -1,8 +1,5 @@
 
 
-// var functions = require(".././functions");
-
-
 
 
 function replaceChar(text, fChar, dChar){

@@ -3,7 +3,7 @@ methodOverride      = require("method-override"),
 bodyParser          = require("body-parser"),
 functions           = require("./functions"),
 request             = require("request"),
-// mongoose            = require("mongoose"),
+mongoose            = require("mongoose"),
 Keyword             = require("./models/keyword.js"),
 Regex = require("regex"),
 app = express();
@@ -55,123 +55,131 @@ app.get("/apiCreator", function(req,res){
 });
 
 // =====================
+// keywords highlighter
+// =====================
+
+app.get("/highlighter", function(req,res){
+   res.render("highlightKeys/index"); 
+});
+
+// =====================
 // Keyword Presentation
 // =====================
 
-// app.get("/specificKey", function(req,res){
-//   Keyword.find({},function(err,allKeywords){
-//       if (err){
-//           console.log(err);
-//       } else {
-//           res.render("specificKey/index", {allKeywords:allKeywords})
-//       }
+app.get("/specificKey", function(req,res){
+   Keyword.find({},function(err,allKeywords){
+       if (err){
+           console.log(err);
+       } else {
+           res.render("specificKey/index", {allKeywords:allKeywords})
+       }
        
-//   });
-// });
+   });
+});
 
-// app.get("/specificKey/:id", function(req,res){
-//     // use the id to find the specific keyword in the database
-//     Keyword.findById(req.params.id, function(err,keyword){
-//         if(err){
-//             console.log(err);
-//         } else { //render the show page along with the required params
-//             res.render("specificKey/show",{historyData:keyword.updates, term:keyword.term})
-//         }
-//     });
-// });
+app.get("/specificKey/:id", function(req,res){
+    // use the id to find the specific keyword in the database
+    Keyword.findById(req.params.id, function(err,keyword){
+        if(err){
+            console.log(err);
+        } else { //render the show page along with the required params
+            res.render("specificKey/show",{historyData:keyword.updates, term:keyword.term})
+        }
+    });
+});
 
 
-// app.post("/specificKey/:id", function(req,res){
-//     console.log(req.body.term);
-//     Keyword.findOne({term: req.body.term},function(err, keyword){
-//         if (err){
-//             console.log(err);
-//         } else {
-//             res.render("specificKey/show",{historyData:keyword.updates, term:keyword.term})
-//             keyword["updates"].forEach(function(el){
-//               if(el.date =="Sun Aug 06 2017 00:00:00 GMT+0000 (UTC)"){
-//                   console.log(el.traffic);
-//               } else {
-//                   console.log("nothing");
-//               }
-//             });
+app.post("/specificKey/:id", function(req,res){
+    console.log(req.body.term);
+    Keyword.findOne({term: req.body.term},function(err, keyword){
+        if (err){
+            console.log(err);
+        } else {
+            res.render("specificKey/show",{historyData:keyword.updates, term:keyword.term})
+            keyword["updates"].forEach(function(el){
+              if(el.date =="Sun Aug 06 2017 00:00:00 GMT+0000 (UTC)"){
+                  console.log(el.traffic);
+              } else {
+                  console.log("nothing");
+              }
+            });
             
-//             // Adding info of the keywords for a specific date to the array
-//             // by finding the keywords with the id, specifiying 'updates' key and push
-//             // the 'newData' set to the array
-//             // keyword.updates.push(newData);
-//             // keyword.save();
-//         }
-//     });
+            // Adding info of the keywords for a specific date to the array
+            // by finding the keywords with the id, specifiying 'updates' key and push
+            // the 'newData' set to the array
+            // keyword.updates.push(newData);
+            // keyword.save();
+        }
+    });
    
-// });
+});
 
-// app.get("/specificKey/:id/edit")
+app.get("/specificKey/:id/edit")
 
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("Server is running");
 });
 
-function createKey(term,traffic,difficulty,competition){
-    //set the parameters in the Keyword Schema order
-    var newKey = {
-        term: term,
-        updates:[{
-            date: new Date().getTime(),
-            traffic: traffic,
-            difficulty: difficulty,
-            competition: competition
-        }]
-    };
-    Keyword.create(newKey, function(err, keyword){
-        if(err){
-            console.log(err);
-        } else {
-            console.log(keyword);
-        }
-    })
-}
+// function createKey(term,traffic,difficulty,competition){
+//     //set the parameters in the Keyword Schema order
+//     var newKey = {
+//         term: term,
+//         updates:[{
+//             date: new Date().getTime(),
+//             traffic: traffic,
+//             difficulty: difficulty,
+//             competition: competition
+//         }]
+//     };
+//     Keyword.create(newKey, function(err, keyword){
+//         if(err){
+//             console.log(err);
+//         } else {
+//             console.log(keyword);
+//         }
+//     })
+// }
 
-//Update a single keyword Data
-function updateKeyword(term,traffic,difficulty,competition){
-    var newData = {
-        // set a new parameter "Updated". Created only when it's being updated
-        updated: new Date().getTime(),
-        traffic: traffic,
-        difficulty: difficulty,
-        competition: competition
-    };
-    Keyword.findOne({date: Date().getTime()},function(err, keyword){
-        if (err){
-            console.log(err);
-        } if (keyword == null){ // if there is not keyword data for this date, add the data for this date
-            createKey(term,traffic,difficulty,competition);
-        } else { // else, update the fields of the keywords on this specific date
-            // Adding info of the keywords for a specific date to the array
-            // by finding the keywords with the id, specifiying 'updates' key and push
-            // the 'newData' set to the array
-            keyword.updates.push(newData);
-            keyword.save();
-        }
-    });
-}
+// //Update a single keyword Data
+// function updateKeyword(term,traffic,difficulty,competition){
+//     var newData = {
+//         // set a new parameter "Updated". Created only when it's being updated
+//         updated: new Date().getTime(),
+//         traffic: traffic,
+//         difficulty: difficulty,
+//         competition: competition
+//     };
+//     Keyword.findOne({date: Date().getTime()},function(err, keyword){
+//         if (err){
+//             console.log(err);
+//         } if (keyword == null){ // if there is not keyword data for this date, add the data for this date
+//             createKey(term,traffic,difficulty,competition);
+//         } else { // else, update the fields of the keywords on this specific date
+//             // Adding info of the keywords for a specific date to the array
+//             // by finding the keywords with the id, specifiying 'updates' key and push
+//             // the 'newData' set to the array
+//             keyword.updates.push(newData);
+//             keyword.save();
+//         }
+//     });
+// }
 
-// Update s data of a specific term, and for a specific date.
-Keyword.findOne({term:"hello"},function(err,foundKeyword){
-    var givenDate = new Date('2017-08-28').toDateString();
-  if (err){
-      console.log(err);
-  } else {
-      foundKeyword.updates.forEach(function(el){
-          if(el.date.toDateString()===givenDate){
-              el.traffic = 7.0;
-              el.updated = Date.now();
-          }
-      });
-      foundKeyword.save();
-      console.log(foundKeyword);
-  }
-});
+// // Update s data of a specific term, and for a specific date.
+// Keyword.findOne({term:"hello"},function(err,foundKeyword){
+//     var givenDate = new Date('2017-08-28').toDateString();
+//   if (err){
+//       console.log(err);
+//   } else {
+//       foundKeyword.updates.forEach(function(el){
+//           if(el.date.toDateString()===givenDate){
+//               el.traffic = 7.0;
+//               el.updated = Date.now();
+//           }
+//       });
+//       foundKeyword.save();
+//       console.log(foundKeyword);
+//   }
+// });
 
 
     // Keyword.findOneAndUpdate(

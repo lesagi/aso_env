@@ -21,13 +21,18 @@ functions.cleanArray = function(array){
 
 functions.lineByLineToArray = function(text) {
 	// get line-by-line list and break into an array
-	var array =[];
-	if(text.search(',') !== -1){
-	    array = text.split(',');
-	} else {
-	    array = text.split('\n');
-	}
-	return functions.cleanArray(array);
+	if(text) {
+        text = text.replace(/\W/g, ' ');
+        var keywordsArr = text.split(" ");
+    }
+    return keywordsArr;
+	// var array =[];
+	// if(text.search(',') !== -1){
+	//     array = text.split(',');
+	// } else {
+	//     array = text.split('\n');
+	// }
+	return functions.cleanArray(keywordsArr);
 }
 
 // Remove duplicates in arrray
@@ -211,6 +216,17 @@ functions.getAppListByURL = function(url){
         }
     });
     return appLists;
+}
+
+// get the app list from MA (only MA, any other service provider 
+// will require refactoring this code), and return the apps names
+// in an array
+function appNamesListToArray(list){
+	var arr =[];
+	for (var appName in list) {
+        arr.push(appName);
+    }
+    return arr;
 }
 
 
