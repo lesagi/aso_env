@@ -21,9 +21,6 @@ function highlight(){
     setTextOutput();
     mark();
     replaceMarkTags();
-    // // Edit the label to the text appear
-	var textOutputLabel=document.querySelector("label[for=textOutput]");
-	textOutputLabel.innerText = "Hihglighted Description:"
 }
 
 function mark(){
