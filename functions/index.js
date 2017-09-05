@@ -135,56 +135,73 @@ functions.textToArr = function(text){
 	return arr;
 }
 
-functions.preventRep = function(a, b, c, d){
-	//identify how many keywords were given as parameters
-		//if four...
-		if(d){
-			//if (d!==b, d!==c) return true
-			if(d!==b && d!==c) return true;
-			// else return false
-			else return false;
-		}
-		if(c){
-			//if (c!==b, c!==a) return true
-			if(c!==b && c!==a) return true;
-			// else return false
-			else return false;
-			
-		}
-		if(b){
-			//if (a!==b) return true
-			if(a!==b) return true;
-			// else return false
-			else return false;		
-		}
-		//return true;
-		return true;
-}
+functions.buildPhrases = function(wordsArr){
+	var newArr = [];
+	wordsArr.forEach(function(a){
+		newArr.push(a);
+		wordsArr.forEach(function(b){
 
-functions.createPhrases = function(arr){
-	arr.forEach(function(a){
-		console.log(a);
-		arr.forEach(function(b){
-			if(functions.preventRep(a, b)){
-				console.log(a + " " + b);
-				arr.forEach(function(c){
-					if (functions.preventRep(a, b, c)){
-						console.log(a + " " + b + " " + c);
-						arr.forEach(function(d){
-							if(functions.preventRep(a, b, c, d)){
-								console.log(a + " " + b + " " + c + " " + d);
-							}
-						});
-					}
-					
-				});
+			if(!functions.checkRep(a,b)){
+				newArr.push(a+ " " + b);
 			}
-			
+			wordsArr.forEach(function(c){
+				if(!functions.checkRep(a,b,c)){
+					newArr.push(a+ " " + b + " " + c);
+				}
+				wordsArr.forEach(function(d){
+					if(!functions.checkRep(a,b,c,d)){
+						newArr.push(a+ " " + b + " " + c + " " + d);
+					}
+					wordsArr.forEach(function(e){
+						if(!functions.checkRep(a,b,c,d,e)){
+							newArr.push(a+ " " + b + " " + c + " " + d + " " + e);
+						}
+					});
+				});
+			});
 		});
 	});
+	return newArr;
 }
 
+
+
+
+functions.checkRep = function(a,b,c,d,e){
+	var isRep = false;
+	if(e && functions.compareEls([a,b,c,d],e)){
+		return true;
+	} else if(d && functions.compareEls([a,b,c],d)) {
+		return true;
+	} else if(c && functions.compareEls([a,b],c)){
+		return true;
+	} else if(b && functions.compareEls([a],b)){
+		return true;
+	} else return false;
+}
+
+
+// Return true if both are equal
+functions.compareTwo = function(a,b,c,d,e){
+	if(a===b){
+		return true;
+	}
+	else return false;
+}
+
+functions.compareEls = function(arr,num){
+	var isFound = false;
+	arr.forEach(function(el){
+		if(num === el){
+			isFound =  true;
+		}
+	});
+	return isFound;
+}
+
+
 functions.sortAppByOS = function(appObj){
+	
     var regex = new RegExp();
 	regex = /(?:(\D))/i;
     var iOS = {};
@@ -200,23 +217,9 @@ functions.sortAppByOS = function(appObj){
             iOS[appName] = mobileActionID;
         }
     }
-    return {"iOS":iOS, "android":android};
+    return {"iOS":iOS, "Android":android};
 }
 
-functions.getAppListByURL = function(url){
-    var appLists = {};
-    request(url, function(err, res, body){
-        if(res.statusCode==200){
-            var parsedData = JSON.parse(body);
-            var apps = functions.sortAppByOS(parsedData);
-            appLists = {"iOS":apps["iOS"], "android":apps["android"]};
-        } else {
-            console.log("err");
-            console.log(err);
-        }
-    });
-    return appLists;
-}
 
 // get the app list from MA (only MA, any other service provider 
 // will require refactoring this code), and return the apps names
