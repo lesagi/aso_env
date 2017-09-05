@@ -57,7 +57,7 @@ app.get("/commaSeperator", function(req,res){
 // =====================
 
 app.get("/highlighter", function(req,res){
-   res.render("highlightKeys/index",{appLists:appLists}); 
+   res.render("highlightKeys/index"); 
 });
 
 // =====================
