@@ -60,6 +60,10 @@ app.get("/highlighter", function(req,res){
    res.render("highlightKeys/index"); 
 });
 
+app.listen(process.env.PORT, process.env.IP, function(){
+    console.log("Server is running");
+});
+
 // =====================
 // Keyword Presentation
 // =====================
@@ -114,9 +118,7 @@ app.get("/highlighter", function(req,res){
 
 // app.get("/specificKey/:id/edit")
 
-// app.listen(process.env.PORT, process.env.IP, function(){
-//     console.log("Server is running");
-// });
+
 
 // // function createKey(term,traffic,difficulty,competition){
 // //     //set the parameters in the Keyword Schema order
