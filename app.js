@@ -16,9 +16,9 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 
-mongoose.connect(process.env.DATABASEURL);
+mongoose.connect("mongodb://vitali84:10x4that@ds133004.mlab.com:33004/aso_env");
 
-//MONGOLAB mongodb://vitali84:10x4that@ds133004.mlab.com:33004/aso_env
+// MONGOLAB mongodb://vitali84:10x4that@ds133004.mlab.com:33004/aso_env
 //LOCAL mongodb://localhost/aso_env
 
     
