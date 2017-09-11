@@ -22,7 +22,14 @@
             <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
             <!--	<textarea class="form-control" name="description" placeholder="Enter your text here..." rows="5"></textarea>-->
             <!--</div>-->
-            
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            	<label>Levels:</label>
+            	<select id="level" name="level" class="selectpicker">
+                    <% for (var i = 1; i <= 4; i++) { %>
+                        <option value="<%=i%>"><%=i%></option>
+                    <% } %>
+                </select>
+            </div>
             <input class="btn btn-success" id="extract" type="submit"  value="Submit">
         </form>
     </div>
@@ -50,13 +57,22 @@
     		<div class="col-lg-6">
     			<table class="table table-bordered table-hover">
 			    	<tr class="row">
-					    <th class="col-xs-6">Subtitle</th>
+					    <th class="col-xs-6">Keyword</th>
+					    <th class="col-xs-6">Traffic</th>
 					</tr>
+					
 					<% for(var i=0; i<subTitleArr.length; i++){ %>
 						<% if(subTitleArr[i].length>1){ %>
 							<tr class="row">
 					    	    <td class="col-xs-12">
 					    	        <%= subTitleArr[i] %>
+					    	    </td>
+					    	    <td>
+					    	    	<% keywords.forEach(function(el){ %>
+						    	    	<% if (el.keyword == subTitleArr[i]) { %>
+						    	    		<%= el.updates[0].traffic; %>
+						    	    	<% } %>
+						    	    <% }); %>
 					    	    </td>
 					    	</tr>
 						<% } %>

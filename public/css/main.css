@@ -42,6 +42,6 @@ textarea {
 /*  position: relative;*/
 /*}*/
 
-.embedded-textarea {
-
+.delete-form {
+    display: inline;
 }

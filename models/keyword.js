@@ -3,9 +3,10 @@ mongoose    = require("mongoose"),
 app = express();
 
 var keywordSchema = new mongoose.Schema({
-   term: { type: String, lowercase: true },
+   keyword: { type: String, lowercase: true },
+   addedToDB: {type: Date, default: Date.now},
    updates: [{ 
-      date: {type: Date, default: Date.now},
+      date: {type: Date, default: new Date},
       traffic: Number,
       difficulty: Number,
       competition: Number,

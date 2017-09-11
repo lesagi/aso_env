@@ -97,7 +97,7 @@ functions.replaceChar = function(text, fChar, dChar){
     return text.split(fChar).join(dChar);
 }
 
-//textToArray - the function get bunch of text and compile an array with each word as an object in the array
+
 functions.getFirstWord = function(text) {
 	var fChar = 0;
 	var lChar = 0;
@@ -122,7 +122,7 @@ functions.getFirstWord = function(text) {
   return  word
 }
 
-
+//textToArray - the function get bunch of text and compile an array with each word as an object in the array
 functions.textToArr = function(text){
 	var regex = new RegExp();
 	regex = /(?:(\w|'))/i;
@@ -135,25 +135,25 @@ functions.textToArr = function(text){
 	return arr;
 }
 
-functions.buildPhrases = function(wordsArr){
+functions.buildPhrases = function(wordsArr, levels){
 	var newArr = [];
 	wordsArr.forEach(function(a){
 		newArr.push(a);
 		wordsArr.forEach(function(b){
 
-			if(!functions.checkRep(a,b)){
+			if(levels>1 && !functions.checkRep(a,b)){
 				newArr.push(a+ " " + b);
 			}
 			wordsArr.forEach(function(c){
-				if(!functions.checkRep(a,b,c)){
+				if(levels>2 && !functions.checkRep(a,b,c)){
 					newArr.push(a+ " " + b + " " + c);
 				}
 				wordsArr.forEach(function(d){
-					if(!functions.checkRep(a,b,c,d)){
+					if(levels>3 && !functions.checkRep(a,b,c,d)){
 						newArr.push(a+ " " + b + " " + c + " " + d);
 					}
 					wordsArr.forEach(function(e){
-						if(!functions.checkRep(a,b,c,d,e)){
+						if(levels>4 && !functions.checkRep(a,b,c,d,e)){
 							newArr.push(a+ " " + b + " " + c + " " + d + " " + e);
 						}
 					});
@@ -166,9 +166,9 @@ functions.buildPhrases = function(wordsArr){
 
 
 
-
-functions.checkRep = function(a,b,c,d,e){
+functions.checkRep = function(a,b,c,d,e,levels){
 	var isRep = false;
+
 	if(e && functions.compareEls([a,b,c,d],e)){
 		return true;
 	} else if(d && functions.compareEls([a,b,c],d)) {
