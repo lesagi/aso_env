@@ -4,6 +4,9 @@ app = express();
 
 var blackKeywordSchema = new mongoose.Schema({
    keyword: String,
+   traffic: Number,
+   difficulty: Number,
+   competition: Number,
    added: {type:Date, default: new Date()}
 });
 

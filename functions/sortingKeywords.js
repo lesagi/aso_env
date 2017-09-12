@@ -27,9 +27,15 @@ sortingKeywords.addKeyToKeywordsCollection = function(obj){
 }
 
 // Create a new keywords into the blackListKeyword Collection in the DB
-sortingKeywords.addKeyToblackListKeywordsCollection = function(keyword, err){
+sortingKeywords.addKeyToblackListKeywordsCollection = function(obj, err){
+    var newKey = {
+        keyword: obj.keyword,
+        traffic: Math.round(obj.searchVolume),
+        difficulty: Math.round(obj.ownIphoneChance),
+        competition: obj.numberOfIphoneApps
+    }
     if(!err){
-        blackKeyword.create({keyword:keyword}, function(err, keyword){
+        blackKeyword.create(newKey, function(err, keyword){
             if(err){
                 console.log(err);
             } else {
@@ -70,7 +76,7 @@ sortingKeywords.sortVerifiedPhrase = function(phrase, c) {
             } else {
                 // console.log("doesn't meet rquirement");
                 console.log(keyword);
-                sortingKeywords.addKeyToblackListKeywordsCollection(phrase);
+                sortingKeywords.addKeyToblackListKeywordsCollection(keyword);
             }
         } else {
             // if(response.statusCode == 429){
