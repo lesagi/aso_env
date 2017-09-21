@@ -50,6 +50,49 @@ sortingKeywords.addKeyToblackListKeywordsCollection = function(obj, err){
     
 }
 
+sortingKeywords.addKeyToKeywordsCollectionFromAppAPI = function(obj){
+    var newKey = {
+        keyword: obj.keyword,
+        updates:[{
+            traffic: Math.round(obj.searchVolume),
+            difficulty: Math.round(obj.chance),
+            competition: obj.numberOfApps
+        }]
+    };
+    Keyword.create(newKey, function(err, keyword){
+        if(err){
+            console.log(err);
+        } else {
+            // console.log("createKey function");
+            // console.log(keyword);
+        }
+    });
+}
+
+// Create a new keywords into the blackListKeyword Collection in the DB
+sortingKeywords.addKeyToblackListKeywordsCollectionFromAppAPI = function(obj, err){
+    var newKey = {
+        keyword: obj.keyword,
+        traffic: Math.round(obj.searchVolume),
+        difficulty: Math.round(obj.chance),
+        competition: obj.numberOfApps
+    }
+    if(!err){
+        blackKeyword.create(newKey, function(err, keyword){
+            if(err){
+                console.log(err);
+            } else {
+                // console.log("createKey function");
+                // console.log(keyword);
+            }
+        });
+    } else {
+        console.log("Could not add a keyword to the blacklist due the following error:");
+        console.log(err);
+    }
+    
+}
+
 sortingKeywords.isKeyMeetRequirements = function(obj){
     var traffic = obj.searchVolume;
     if(traffic>0){ // can add requirements dynamically in the IF STATEMENT
@@ -75,7 +118,7 @@ sortingKeywords.sortVerifiedPhrase = function(phrase, c) {
                 sortingKeywords.addKeyToKeywordsCollection(keyword);
             } else {
                 // console.log("doesn't meet rquirement");
-                console.log(keyword);
+                // console.log(keyword);
                 sortingKeywords.addKeyToblackListKeywordsCollection(keyword);
             }
         } else {
@@ -86,7 +129,7 @@ sortingKeywords.sortVerifiedPhrase = function(phrase, c) {
             // console.log("Sending the following keyword: --" + phrase + "-- has failed.");
             // console.log("status code: " + response.statusCode);
             console.log(phrase);
-            console.log("status message: " + response.statusMessage);
+            // console.log("status message: " + response.statusMessage);
             // console.log(response);
             // console.log("Error: " + error);
             
@@ -127,7 +170,7 @@ function callback(err,keyword,c){
 
 
 //Checks if a specific keywords existed in the black list or not
-function isInBlacklist(keyword, callback){ 
+sortingKeywords.isInBlacklist = function(keyword, callback){ 
     blackKeyword.find({keyword:keyword},function(err,foundKeyword){
         if(foundKeyword.length>0){
             callback(err,true);
@@ -143,7 +186,7 @@ sortingKeywords.sortNewPhrases = function(phrases){
     var c = 0;
     phrases.forEach(function(keyword){
         // the call back function will set the value of "inBlacklist" to false or true if the keyword is in the DB or not accordingly
-        isInBlacklist(keyword,function(err,inBlacklist){
+        sortingKeywords.isInBlacklist(keyword,function(err,inBlacklist){
             if(!err && !inBlacklist){
                 Keyword.find({keyword:keyword},function(err,foundKeyword){
                 

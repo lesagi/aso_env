@@ -2,10 +2,20 @@ var express = require("express"),
 Keyword = require("../models/keyword.js"),
 functions = require("../functions"),
 request = require("request"),
+blackKeyword = require("../models/blackKey.js"),
 sortPhrasesFunctions = require("../functions/sortingKeywords.js"),
 app = express();
 
 var router = express.Router();
+
+var mongoose_csv = require('mongoose-csv');
+var fs = require("fs");
+
+var json2csv = require('json2csv');
+
+var paginate = require('express-paginate');
+// keep this before all routes that will use pagination 
+router.use(paginate.middleware(10, 200));
 
 
 // =====================
@@ -14,16 +24,45 @@ var router = express.Router();
 
 
 // INDEX page
-router.get("/", function(req,res){
-    // createKeyFromAPI("hello");
-   Keyword.find({},function(err,allKeywords){
-       if (err){
-          console.log(err);
-       } else {
-           res.render("dbKeywords/index", {allKeywords:allKeywords});
-       }
-       
-   }).sort({'keyword': 1}); // This gives back the results (all keywords in the db) ordered alphabetically
+router.get("/", function(req,res,next){
+
+    var searchTerm = req.query.keyword;
+    if(!req.query.keyword){
+        var searchTerm = "";
+    }
+    var defineQuery = {
+        'keyword' : { $regex: new RegExp('\\b' + searchTerm, 'gi') }
+    }
+    
+    var atoz = req.query.sort;
+    if(!req.query.sort){
+        var atoz = 1;
+    }
+
+    Keyword.paginate(defineQuery,{ sort: { 'keyword': atoz}, page: req.query.page, limit: req.query.limit }, function(err, keywords) {
+        if (err) return next(err);
+            res.format({
+                html: function() {
+                    res.render('dbKeywords/index', {
+                        lastPage: keywords.pages,
+                        searchTerm: searchTerm,
+                        atoz: atoz,
+                        keywords: keywords.docs,
+                        pageCount: keywords.pages,
+                        itemCount: keywords.limit,
+                        pages: paginate.getArrayPages(req)(3, keywords.pages, req.query.page)
+                    });
+                },
+            json: function() {
+                // inspired by Stripe's API response for list objects 
+                res.json({
+                    object: 'list',
+                    has_more: paginate.hasNextPages(req)(keywords.pages),
+                    data: keywords.docs
+                });
+            }
+        });
+    });
 });
 
 // SHOW - get info about specific keyword
@@ -51,6 +90,77 @@ router.delete("/:id",function(req,res){
     })
 });
 
+
+function getTodayDate(){
+    var today = new Date();
+    return today.toDateString();
+}
+
+
+router.get("/verified/csv",function(req,res){
+    // res.writeHead(200, {
+    //     'Content-Type': 'text/csv',
+    //     'Content-Disposition': 'attachment; filename=verifiedKeywords_'+getTodayDate()+'.csv'
+    // });
+
+    Keyword.find().lean().exec(function (err, keywords) {
+        
+        // Convert the DB structure to a new tide structure
+        var newStruct = customizeJsonResult(keywords);
+        
+        // write the temp file to the folder
+        writeKeywordsCSV(newStruct);
+        
+        // Makes sure that the download will start only after the was created and is full with data
+        // without setTimeout() we get an empty file
+        setTimeout(function(){
+            return res.download('tempFiles/verifiedKeywords.csv', 'Verified Keywords_' + getTodayDate() + '.csv')
+        },0);
+        return newStruct;
+    })
+
+});
+
+
+function writeKeywordsCSV(keywords){
+    var fields = ['Keyword', 'Traffic', 'Difficulty', 'Competition', 'Date'];
+    var fieldNames = ['Keyword', 'Traffic', 'Difficulty', 'Competition', 'Date'];
+    
+    var myData = keywords;
+    try {
+      var result = json2csv({ data: myData, fields: fields,fieldNames:fieldNames, quotes: '' });
+      fs.writeFile(('tempFiles/verifiedKeywords.csv'), result, function(err) {
+        if (err) throw err;
+            console.log('file saved');
+        });
+    } catch (err) {
+      console.error(err);
+    }
+};
+
+
+
+function customizeJsonResult(keywords, res){
+    var allKeywordsArr = [];
+    keywords.forEach(function(keyword){
+        //Pointer to the last element in the updates list
+        var lastUpdatesIndex = keyword.updates.length-1;
+        
+        //last element
+        var el = keyword.updates[lastUpdatesIndex];
+        
+        var newForm = {
+            Keyword     : keyword.keyword,
+            Traffic     : el.traffic,
+            Difficulty  : el.difficulty,
+            Competition : el.competition,
+            Date        : el.date.toLocaleDateString()
+        }
+        allKeywordsArr.push(newForm);
+    });
+    // console.log(JSON.stringify(allKeywordsArr));
+    return (allKeywordsArr);
+}
 
 
 

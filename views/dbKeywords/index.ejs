@@ -1,39 +1,60 @@
 <% include ../partials/header.ejs %>
 
-    
+    <script>
+        function getKeyURL(paginate){
+            var key = document.querySelector("div div input");
+            return paginate.href({ keyword: 2});
+        }
+    </script>
     <div class="container container-fluid">
         <h1>Specific Keyword</h1>
-        <form class="row form-horizontal" action="/dbKeywords" method="POST">
-            <div class="form-group">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <input class="form-control" type="search" name="term" placeholder="Type a keyword to search"></input>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                     <button type="submit" class="btn btn-primary">Search</button>
-                </div>
-            </div>
-        </form>
-        <ul>
-            <% allKeywords.forEach(function(keyword){ %>
-            <div class="row">
-                 <li>
-                     <span class="col-lg-10">
-                         <a href="/dbKeywords/<%=keyword._id%>"><%=keyword.keyword%></a>
-                     </span>
-                    <span class="col-lg-2">
-                         <form class="delete-form pull-right" action="/dbKeywords/<%=keyword._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-xs btn-danger">Delete</button>
-                        </form>
-                    </span>
-                   
-                </li>
-            </div>
-               
-            <% }); %>
-        </ul>
         
+        <div>
+            <form class="form-horizontal" action="<%=paginate.href({ keyword: this.value})%>" method="GET">
+                    <input class="form-control" type="search" name="keyword" placeholder="Search Keyword..." value="<%=searchTerm%>" onpress="this.form.submit();"></input>
+            </form>
+        
+            <label for="resultAmount">Number of results on page: </label>
+            <select class="btn btn-default dropdown-toggle" name="resultAmount" onchange="location = this.value;" style="inline">
+                <option value="#">Select number...</option>
+                <option value="<%=paginate.href({ limit: 10})%>">10</option>
+                <option value="<%=paginate.href({ limit: 20})%>">20</option>
+                <option value="<%=paginate.href({ limit: 50})%>">50</option>
+                <option value="<%=paginate.href({ limit: 100})%>">100</option>
+            </select>
+        </div>
+       <div>
+            <a class="pull-right" href="/dbKeywords/verified/csv"><i class="i glyphicon glyphicon-save"></i>Download all to CSV</a>
+       </div>
+        
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        <% if(atoz==1){ %>
+                            <a href="<%=paginate.href({ sort: -1 })%>">Keyword <i class="i glyphicon glyphicon-sort-by-alphabet-alt"></i></a>
+                        <% } else if(atoz==-1) { %>
+                            <a href="<%=paginate.href({ sort: 1 })%>">Keyword s<i class="i glyphicon glyphicon-sort-by-alphabet"></i></a>
+                        <% } %>
+                    </th>
+                </tr>
+            </thead>
+            
+        
+            <tbody>
+                <% keywords.forEach(function(keyword){ %>
+                    <tr>
+                        <td>
+                            <a href="/dbKeywords/<%=keyword._id%>"><%=keyword.keyword%></a>
+                            <form class="delete-form pull-right" action="/dbKeywords/<%=keyword._id%>?_method=DELETE" method="POST">
+                                <button class="btn btn-xs btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <% include _paginate %>
     </div>
     
 

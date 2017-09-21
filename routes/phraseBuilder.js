@@ -27,13 +27,19 @@ router.post("/",function(req, res){
    subTitleArr = functions.cleanArray(subTitleArr);
    subTitleArr = functions.removeArrayDuplicates(functions.buildPhrases(subTitleArr,level));
    
+   var csvList = arrayToCsv(subTitleArr,"Keyword");
    dbKeywordsAccess.sortNewPhrases(titleArr);
-   // GET all keywords from the DB
+   // GET all keywords from the DB so the tables in the show page will have the traffic score alongside the keywords permutation
    Keyword.find({},function(err,keywords){
       if(!err){
          blackKeyword.find({},function(err,blackKeywords){
             if(!err){
-               res.render("phraseBuilder/show", {titleArr:titleArr, subTitleArr:subTitleArr, keywords:keywords, blackKeywords:blackKeywords});
+               try{
+                  res.render("phraseBuilder/show", {titleArr:titleArr, subTitleArr:subTitleArr, csvList:csvList, keywords:keywords, blackKeywords:blackKeywords});
+               } catch(err) {
+                  console.log(err);
+                  res.send("request timed out");
+               }
             }
          });
          
@@ -41,6 +47,16 @@ router.post("/",function(req, res){
    });
 });
 
-
+function arrayToCsv(arr,headers) {
+   var csv = "data:text/csv;charset=utf-8,"
+   csv += headers;
+   arr.forEach(function(row) {
+         csv += "\\n" + row;
+   });
+   // console.log(csv);
+   // console.log("\"" + csv + "\"");
+   csv = "\"" + csv + "\"";
+   return csv;
+}
 
 module.exports = router;

@@ -3,12 +3,12 @@ textarea {
 }
 
 .btn {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 
 .btn.btn-default.dropdown-toggle {
-    width:100%;
+    width:auto;
 }
 
 #apiCreateForm {
@@ -25,23 +25,23 @@ textarea {
 .highlight {
     background: yellow;
 }
-/*textarea{*/
-/*    line-height:100%;*/
-/*    height: 12px;*/
-/*}*/
 
-/*.child {*/
-/*  position: absolute;*/
-/*  top: 0; left: 0;*/
-/*  width: 100%; height: 100%;*/
-/*}*/
-
-/*.parent {*/
-/*  height: 0;*/
-  
-/*  position: relative;*/
-/*}*/
 
 .delete-form {
     display: inline;
+}
+
+/*styles the disabled button in the pagination*/
+li.previous span.disabled-buttons {
+    color: grey;
+    background-color: #ddd;
+}
+
+/*styles the table rows and head to be in grey if they are links*/
+table a {
+    color: #333;
+}
+
+form input.form-control{
+    margin-bottom: 1.5%;
 }
