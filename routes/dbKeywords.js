@@ -96,30 +96,75 @@ function getTodayDate(){
     return today.toDateString();
 }
 
-
 router.get("/verified/csv",function(req,res){
-    // res.writeHead(200, {
-    //     'Content-Type': 'text/csv',
-    //     'Content-Disposition': 'attachment; filename=verifiedKeywords_'+getTodayDate()+'.csv'
-    // });
-
     Keyword.find().lean().exec(function (err, keywords) {
         
-        // Convert the DB structure to a new tide structure
-        var newStruct = customizeJsonResult(keywords);
-        
-        // write the temp file to the folder
-        writeKeywordsCSV(newStruct);
-        
-        // Makes sure that the download will start only after the was created and is full with data
-        // without setTimeout() we get an empty file
-        setTimeout(function(){
-            return res.download('tempFiles/verifiedKeywords.csv', 'Verified Keywords_' + getTodayDate() + '.csv')
-        },0);
-        return newStruct;
+        res.writeHead(200, {
+            'Content-Type': 'text/csv',
+            'Content-Disposition': 'attachment; filename=Verified Keywords_' + getTodayDate() + '.csv'
+        });
+        res.end(keywordsToCSV(keywords,["Keywords","Traffic","Difficulty","Competition","Date"]),"binary");
     })
 
 });
+
+        
+// Keyword.find({},function(err,keywords){
+//     console.log(keywordsToCSV(keywords));
+// })
+
+
+// GET ALL KEYWORDS from Database Exported to CSV
+// This function only works with res.header
+// It works in a way where it first sets the format to be as CSV and then it send this organized CSV string to the header and force download in CSV format
+function keywordsToCSV(keywords,headers){
+    var allKeys = [];
+    allKeys.push(headers);
+    keywords.forEach(function(foundKeyword){
+        var arr = [];
+        arr.push(foundKeyword.keyword)
+        var lastUpdate = (foundKeyword.updates)[(foundKeyword.updates).length-1];
+    
+        arr.push(lastUpdate.traffic)
+        arr.push(lastUpdate.difficulty)
+        arr.push(lastUpdate.competition)
+        arr.push(lastUpdate.date.toLocaleDateString())
+        allKeys.push(arr)
+    });
+    // var csvContent = "data:text/csv;charset=utf-8,";
+    var csvContent = "";
+    allKeys.forEach(function(infoArray, index){
+    
+      var dataString = infoArray.join(",");
+      csvContent += index < allKeys.length ? dataString+ "\n" : dataString;
+    }); 
+    // csvContent = "\"" + csvContent + "\"";
+    
+    return csvContent;
+}
+
+
+
+
+// ----------- ALTERNATIVE EXPORTATION TO CSV
+// router.get("/verified/csv",function(req,res){
+//     Keyword.find().lean().exec(function (err, keywords) {
+        
+//         // Convert the DB structure to a new tide structure
+//         var newStruct = customizeJsonResult(keywords);
+        
+//         // write the temp file to the folder
+//         writeKeywordsCSV(newStruct);
+        
+//         // Makes sure that the download will start only after the was created and is full with data
+//         // without setTimeout() we get an empty file
+//         setTimeout(function(){
+//             return res.download('tempFiles/verifiedKeywords.csv', 'Verified Keywords_' + getTodayDate() + '.csv')
+//         },0);
+//         return newStruct;
+//     })
+
+// });
 
 
 function writeKeywordsCSV(keywords){
@@ -189,6 +234,10 @@ function createKeyFromAPI(keyword){
         }
     });
 }
+
+
+
+
 
 
 // updateKeyword("hello",5.2,4.0,220);
