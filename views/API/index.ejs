@@ -48,10 +48,11 @@
         	var appName = document.querySelector("#appNameDropList");
         	var os = document.querySelector("#OpSysDropList");
         	var country = document.querySelector("#countryField");
-        	var trackIdField = document.getElementById("trackId");
         	
-        	apiLink.value = "https://api.mobileaction.co/keywords/"+ getAppId(appName.value,os.value)+"/" +country.value+ "?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28";
-        	trackIdField.value = getAppId(appName.value,os.value);
+        	var storeIdField = document.getElementById("storeId");
+        	
+        	apiLink.value = "https://api.mobileaction.co/keywords/"+ getMmpId(appName.value,os.value)+"/" +country.value+ "?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28";
+        	
         	
         	// Edit the label to the text appear
         	var apiLabel=document.querySelector("label[for=apiLink]");
@@ -59,15 +60,25 @@
         	
         	// make the well visible
         	apiLink.classList.add("well");
+        	
+        	//Setting the mmpId input field, so it will be transferred as part of the req.body
+        	var mmpIdField = document.getElementById("mmpId");
+        	mmpIdField.value = getMmpId(appName.value,os.value);
+        	
+        	//Setting the storeId input field, so it will be transferred as part of the req.body
+        	var storeIdField = document.getElementById("storeId");
+            storeIdField.value = getStoreId(appName.value,os.value);
         }
         
-        function getAppId(name,os){
-        	return appLists[os][name];
+        function getMmpId(name,os){
+        	return appLists[os][name]["mmpId"];
         }
         
+        function getStoreId(name,os){
+        	return appLists[os][name]["storeId"];
+        }
         
-        
-        
+      
         // get the app list from MA (only MA, any other service provider 
         // will require refactoring this code), and return the apps names
         // in an array
@@ -105,7 +116,7 @@
                 <!--OS FIELDS-->
                 
                 <li>
-                    <label for="appNameDropList"> App Name: </label>
+                    <label for="appNameDropList">App Name: </label>
                     <!--APP NAME FIELDS-->
                     <div class="row">
                         <div class="col-lg-12">
@@ -139,7 +150,8 @@
                 <label for="apiLink"></label>
                 <output id="apiLink" name="apiLink"></output>
                 
-                <input id="trackId" name="trackId" hidden></input>
+                <input id="mmpId" name="mmpId" hidden></input>
+                <input id="storeId" name="storeId" hidden></input>
                 <button>Add to DB</button>
             
         </form>

@@ -210,11 +210,18 @@ functions.sortAppByOS = function(appObj){
    
     for(var id in appObj) {
         var appName = appObj[id].appName;
-        var mobileActionID = appObj[id].appId;
+        var mmpId = appObj[id].appId;
+        var storeId = id;
         if(regex.test(id)){
-            android[appName] = mobileActionID;
+            android[appName] = {
+            		mmpId: mmpId,
+            		storeId: storeId
+            	};
         } else {
-            iOS[appName] = mobileActionID;
+            iOS[appName] = {
+            		mmpId: mmpId,
+            		storeId: storeId
+            	};
         }
     }
     return {"iOS":iOS, "Android":android};

@@ -26,6 +26,13 @@ textarea {
     background: yellow;
 }
 
+.form-inline{
+    display: inline;
+}
+
+.form-inline .btn{
+    margin: 0;
+}
 
 .delete-form {
     display: inline;
@@ -45,3 +52,30 @@ table a {
 form input.form-control{
     margin-bottom: 1.5%;
 }
+
+a h4{
+    display:inline;
+}
+
+.app-row-thumbnail {
+  display: block;
+  padding: 4px;
+  margin-bottom: 20px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  -webkit-transition: border .2s ease-in-out;
+       -o-transition: border .2s ease-in-out;
+          transition: border .2s ease-in-out;
+}
+
+.app-header{
+    display:inline;
+    vertical-align: middle;
+}
+
+.null-mmpid{
+    color:red;
+}
+

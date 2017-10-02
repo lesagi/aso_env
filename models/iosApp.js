@@ -1,9 +1,11 @@
-var mongoose = require("mongoose");
+var mongoose = require("mongoose"),
+mongoosePaginate = require('mongoose-paginate');
 
 var iosAppSchema = new mongoose.Schema({
     "title": String,
+    "normalized": {type: String, lowercase: true, trim: true},
     "storeId": Number,
-    "mmpId": Number,
+    "mmpId": {type: Number, default:null},
     "countries": [String],
     "versionString": String,
     "categoryId": Number,
@@ -20,5 +22,8 @@ var iosAppSchema = new mongoose.Schema({
         }
     ]
 });
+
+// -------------mongoose-pagination ---------------
+iosAppSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("iosApp",iosAppSchema);

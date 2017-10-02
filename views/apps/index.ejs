@@ -1,0 +1,93 @@
+<% include ../partials/header.ejs %>
+    <script>
+    // 	function downloadCSV(){
+    // 		var csvContent = <%-//csvList%>;
+    		
+    // 		var encodedUri = encodeURI(csvContent);
+    // 		var link = document.createElement("a");
+    // 		link.setAttribute("href", encodedUri);
+    // 		link.setAttribute("download", "my_data.csv");
+    // 		document.body.appendChild(link); // Required for FF
+    		
+    // 		link.click();
+    // 	}
+    </script>
+
+
+    <div class="container container-fluid">
+        <h1>Apps Index</h1>
+        
+        <div>
+            <form class="form-horizontal" action="<%=paginate.href({ title: this.value})%>" method="GET">
+                    <input class="form-control" type="search" name="title" placeholder="Search Keyword..." value="<%=searchTerm%>" onpress="this.form.submit();"></input>
+            </form>
+            
+            <!--CREATE A NEW APP FORM-->
+            
+            <form class="form-group" action="/apps" method="POST">
+                <input type="text" class="form-control" name="storeId" placeholder="enter app ID in order to add a new app" width="100%"></input>
+                <button class="btn btn-success">Add new app</button>
+            </form>
+            
+            <!--END OF CREATE NEW APP FORM-->
+            
+            <label for="resultAmount">Number of results on page: </label>
+            <select class="btn btn-default dropdown-toggle" name="resultAmount" onchange="location = this.value;" style="inline">
+                <option value="#">Select number...</option>
+                <option value="<%=paginate.href({ limit: 10})%>">10</option>
+                <option value="<%=paginate.href({ limit: 20})%>">20</option>
+                <option value="<%=paginate.href({ limit: 50})%>">50</option>
+                <option value="<%=paginate.href({ limit: 100})%>">100</option>
+            </select>
+        </div>
+       <div>
+           <a class="pull-right" href="/apps/exportData/appsList"> &nbsp;<i class="i glyphicon glyphicon-save"></i>Download all to CSV</a>
+           
+           
+       </div>
+        
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        <% if(atoz==1){ %>
+                            <a href="<%=paginate.href({ sort: -1 })%>">Title<i class="i glyphicon glyphicon-sort-by-alphabet-alt"></i></a>
+                        <% } else if(atoz==-1) { %>
+                            <a href="<%=paginate.href({ sort: 1 })%>">Title<i class="i glyphicon glyphicon-sort-by-alphabet"></i></a>
+                        <% } %>
+                        <form class="form-inline" action="/apps?_method=PUT" method="POST" >
+                            <button class="pull-right btn btn-success btn-xs"><i class="i glyphicon glyphicon-refresh"></i> Refresh</button>
+                        </form>
+                    </th>
+                </tr>
+            </thead>
+                
+            <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!I STILL NEED TO FIND OUT HOW TO OVERRIDE H4 STYLING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+            <tbody>
+                <% apps.forEach(function(app){ %>
+                    <tr>
+                        <td>
+                            <a href="#">
+                                <img class="img-fluid img-thumbnail" src="<%=app.iconUrl%>"></img>
+                            </a>
+                            <a href="/apps/<%=app._id%>">
+                                <% if(app.mmpId!==null){ %>
+                                    <h4><%=app.title%></h4>
+                                <% } else { %>
+                                    <h4 class="null-mmpid"><%=app.title%></h4>
+                                <% } %>
+                                
+                            </a>
+                            <form class="delete-form pull-right" action="/apps/<%=app._id%>?_method=DELETE" method="POST">
+                                <button class="btn btn-xs btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <% include _paginate %>
+
+        
+    </div>
+<% include ../partials/footer.ejs %>

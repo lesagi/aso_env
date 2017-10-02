@@ -3,7 +3,7 @@ Keyword = require("../models/keyword.js"),
 functions = require("../functions"),
 request = require("request"),
 blackKeyword = require("../models/blackKey.js"),
-sortPhrasesFunctions = require("../functions/sortingKeywords.js"),
+sortKeywords = require("../functions/sortingKeywords.js"),
 app = express();
 
 var router = express.Router();
@@ -105,14 +105,19 @@ router.get("/verified/csv",function(req,res){
         });
         res.end(keywordsToCSV(keywords,["Keywords","Traffic","Difficulty","Competition","Date"]),"binary");
     })
-
 });
 
-        
-// Keyword.find({},function(err,keywords){
-//     console.log(keywordsToCSV(keywords));
-// })
 
+router.post("/pushToDB",function(req,res){
+    var URL = "https://api.mobileaction.co/keywords/"+req.body.mmpId+"/US?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28";
+    request(URL,function(err,res,body){
+       if(!err){
+          var keywords = (JSON.parse(body)).data
+          sortKeywords.sortNewPhrasesFromAppApi(keywords,req.body.storeId);
+       } 
+    });
+    res.redirect("/apiCreator");
+});
 
 // GET ALL KEYWORDS from Database Exported to CSV
 // This function only works with res.header
@@ -145,7 +150,26 @@ function keywordsToCSV(keywords,headers){
 
 
 
+function removeDuplicateKeywords(){
+    // First let's get the array of data sorted by all values which supposed to be unique ("keyword").
+    // Being sorted, if there are duplicate values they'll show up right after the other, so let's look for results that repeat themselves:
+    var previousKey;
+    Keyword.find({}).sort('keyword').exec(function(err, keywordsArr) {
+        keywordsArr.forEach(function(keyword){
+            var key = keyword.keyword;
+              if (key == previousKey) {
+                // console.log(key);
+                keyword.remove();
+              }
+              previousKey = key;
+        });
+    });
+}
 
+module.exports = router;
+
+
+// ################ Alternative Functions #################
 // ----------- ALTERNATIVE EXPORTATION TO CSV
 // router.get("/verified/csv",function(req,res){
 //     Keyword.find().lean().exec(function (err, keywords) {
@@ -167,80 +191,73 @@ function keywordsToCSV(keywords,headers){
 // });
 
 
-function writeKeywordsCSV(keywords){
-    var fields = ['Keyword', 'Traffic', 'Difficulty', 'Competition', 'Date'];
-    var fieldNames = ['Keyword', 'Traffic', 'Difficulty', 'Competition', 'Date'];
+// function writeKeywordsCSV(keywords){
+//     var fields = ['Keyword', 'Traffic', 'Difficulty', 'Competition', 'Date'];
+//     var fieldNames = ['Keyword', 'Traffic', 'Difficulty', 'Competition', 'Date'];
     
-    var myData = keywords;
-    try {
-      var result = json2csv({ data: myData, fields: fields,fieldNames:fieldNames, quotes: '' });
-      fs.writeFile(('tempFiles/verifiedKeywords.csv'), result, function(err) {
-        if (err) throw err;
-            console.log('file saved');
-        });
-    } catch (err) {
-      console.error(err);
-    }
-};
+//     var myData = keywords;
+//     try {
+//       var result = json2csv({ data: myData, fields: fields,fieldNames:fieldNames, quotes: '' });
+//       fs.writeFile(('tempFiles/verifiedKeywords.csv'), result, function(err) {
+//         if (err) throw err;
+//             console.log('file saved');
+//         });
+//     } catch (err) {
+//       console.error(err);
+//     }
+// };
 
 
 
-function customizeJsonResult(keywords, res){
-    var allKeywordsArr = [];
-    keywords.forEach(function(keyword){
-        //Pointer to the last element in the updates list
-        var lastUpdatesIndex = keyword.updates.length-1;
+// function customizeJsonResult(keywords, res){
+//     var allKeywordsArr = [];
+//     keywords.forEach(function(keyword){
+//         //Pointer to the last element in the updates list
+//         var lastUpdatesIndex = keyword.updates.length-1;
         
-        //last element
-        var el = keyword.updates[lastUpdatesIndex];
+//         //last element
+//         var el = keyword.updates[lastUpdatesIndex];
         
-        var newForm = {
-            Keyword     : keyword.keyword,
-            Traffic     : el.traffic,
-            Difficulty  : el.difficulty,
-            Competition : el.competition,
-            Date        : el.date.toLocaleDateString()
-        }
-        allKeywordsArr.push(newForm);
-    });
-    // console.log(JSON.stringify(allKeywordsArr));
-    return (allKeywordsArr);
-}
+//         var newForm = {
+//             Keyword     : keyword.keyword,
+//             Traffic     : el.traffic,
+//             Difficulty  : el.difficulty,
+//             Competition : el.competition,
+//             Date        : el.date.toLocaleDateString()
+//         }
+//         allKeywordsArr.push(newForm);
+//     });
+//     // console.log(JSON.stringify(allKeywordsArr));
+//     return (allKeywordsArr);
+// }
 
 
 
 
 
+
+
+// ############## pushing keywords to DB ###############
 // get an object returned from an API and set it to be aligned with our DB
-function setKeyFromAPI(object){
-    var keyword = object.keyword;
-    var traffic = Math.round(object.searchVolume);
-    var difficulty = Math.round(object.ownIphoneChance);
-    var competition = object.numberOfIphoneApps;
-    createKeyFromAPI(keyword,traffic,difficulty,competition);
-    return true;
-}
+// function setKeyFromAPI(object){
+//     var keyword = object.keyword;
+//     var traffic = Math.round(object.searchVolume);
+//     var difficulty = Math.round(object.ownIphoneChance);
+//     var competition = object.numberOfIphoneApps;
+//     createKeyFromAPI(keyword,traffic,difficulty,competition);
+//     return true;
+// }
 
-function createKeyFromAPI(keyword){
-    // get the API URL for a specific term and add this keywords to the DB
-    var URL = "https://api.mobileaction.co/appstore-keyword-ranking/US/keyword-metadata?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28&keyword="+keyword;
-    request(URL,function(err,res,body){
-        if(!err && res.statusCode == 200){
-            // Doing the adjustments from the API to be inserted to the DB
-            setKeyFromAPI(JSON.parse(body));
-        } else {
-            console.log("createKeyFromAPI err: ");
-            console.log(err);
-        }
-    });
-}
-
-
-
-
-
-
-// updateKeyword("hello",5.2,4.0,220);
-// createKey("hello",4.6,8.4,256);
-
-module.exports = router;
+// function createKeyFromAPI(keyword){
+//     // get the API URL for a specific term and add this keywords to the DB
+//     var URL = "https://api.mobileaction.co/appstore-keyword-ranking/US/keyword-metadata?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28&keyword="+keyword;
+//     request(URL,function(err,res,body){
+//         if(!err && res.statusCode == 200){
+//             // Doing the adjustments from the API to be inserted to the DB
+//             setKeyFromAPI(JSON.parse(body));
+//         } else {
+//             console.log("createKeyFromAPI err: ");
+//             console.log(err);
+//         }
+//     });
+// }

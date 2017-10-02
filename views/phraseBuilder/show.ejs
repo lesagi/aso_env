@@ -23,30 +23,37 @@
    <!-- </script>-->
     <div class="container container-fluid">
         <h1>Phrase Builder</h1>
-        <form class="row" action="/phraseBuilder" method="POST">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            	<label>To DB:</label>
-            	<textarea class="form-control" name="title" placeholder="Enter your text here..." rows="1"></textarea>
+         <form action="/phraseBuilder" method="POST">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    	<label>To DB:</label>
+                    	<textarea class="form-control" name="title" placeholder="Enter your text here..." rows="1"></textarea>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    	<label>App</label>
+                    	<textarea class="form-control" name="appTitle" placeholder="Enter your text here..." rows="1"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    	<label>Regular generator:</label>
+                    	<textarea class="form-control" name="subtitle" placeholder="Enter your text here..." rows="1"></textarea>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    	<label>Levels:</label>
+                    	<select id="level" name="level" class="selectpicker">
+                            <% for (var i = 1; i <= 4; i++) { %>
+                                <option value="<%=i%>"><%=i%></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <input class="btn btn-success" id="extract" type="submit"  value="Submit">
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            	<label>Regular Generator:</label>
-            	<textarea class="form-control" name="subtitle" placeholder="Enter your text here..." rows="1"></textarea>
-            </div>
-            <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
-            <!--	<textarea class="form-control" name="description" placeholder="Enter your text here..." rows="5"></textarea>-->
-            <!--</div>-->
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            	<label>Levels:</label>
-            	<select id="level" name="level" class="selectpicker">
-                    <% for (var i = 1; i <= 4; i++) { %>
-                        <option value="<%=i%>"><%=i%></option>
-                    <% } %>
-                </select>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            	<input class="btn btn-success" id="extract" type="submit"  value="Submit">
-            	
-            </div>
+            
         </form>
         <input class="btn btn-success" value="Download in CSV" onclick="downloadCSV()">
     </div>

@@ -1,6 +1,8 @@
 var express = require("express"),
 functions = require("../functions"),
+arrangeData = require("../functions/arrangeDataTypes.js"),
 Keyword = require("../models/keyword.js"),
+iosApp = require("../models/iosApp.js"),
 blackKeyword = require("../models/blackKey.js"),
 dbKeywordsAccess = require("../functions/sortingKeywords.js"),
 app = express();
@@ -12,7 +14,12 @@ var router = express.Router();
 // =====================
 
 router.get("/", function(req, res){
-   res.render("phraseBuilder/index"); 
+   // the following query retrieved only apps that have mmpId, meaning existed in MA
+   //({mmpId:{$ne: null}},null,{sort:'normalized'},function(err,iosApps)
+   iosApp.find({},null,{sort:'normalized'},function(err,iosApps){
+       res.render("phraseBuilder/index", {iosApps:iosApps}); 
+   });
+  
 });
 
 router.post("/",function(req, res){
@@ -23,12 +30,13 @@ router.post("/",function(req, res){
    titleArr = functions.removeArrayDuplicates(functions.buildPhrases(titleArr,level));
    
    var subTitleArr = functions.textToArr(req.body.subtitle);
-   ; //level var determines how long the phrase will be in terms of number of keywords
+   //level var determines how long the phrase will be in terms of number of keywords
    subTitleArr = functions.cleanArray(subTitleArr);
    subTitleArr = functions.removeArrayDuplicates(functions.buildPhrases(subTitleArr,level));
    
-   var csvList = arrayToCsv(subTitleArr,"Keyword");
-   dbKeywordsAccess.sortNewPhrases(titleArr);
+   var csvList = arrangeData.arrayToCsv(subTitleArr,"Keyword");
+   
+   dbKeywordsAccess.sortNewPhrases(titleArr, req.body.storeId);
    // GET all keywords from the DB so the tables in the show page will have the traffic score alongside the keywords permutation
    Keyword.find({},function(err,keywords){
       if(!err){
@@ -47,16 +55,8 @@ router.post("/",function(req, res){
    });
 });
 
-function arrayToCsv(arr,headers) {
-   var csv = "data:text/csv;charset=utf-8,"
-   csv += headers;
-   arr.forEach(function(row) {
-         csv += "\\n" + row;
-   });
-   // console.log(csv);
-   // console.log("\"" + csv + "\"");
-   csv = "\"" + csv + "\"";
-   return csv;
-}
+
+
+
 
 module.exports = router;

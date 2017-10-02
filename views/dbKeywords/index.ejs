@@ -1,12 +1,5 @@
 <% include ../partials/header.ejs %>
 
-    <script>
-        function getKeyURL(paginate){
-            var key = document.querySelector("div div input");
-            return paginate.href({ keyword: 2});
-        }
-
-    </script>
     <div class="container container-fluid">
         <h1>Specific Keyword</h1>
         
@@ -27,6 +20,7 @@
        <div>
             <a class="pull-right" href="/dbKeywords/verified/csv"><i class="i glyphicon glyphicon-save"></i>Download all to CSV</a>
        </div>
+       
         
         <table class="table table-bordered table-hover">
             <thead>
