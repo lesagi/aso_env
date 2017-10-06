@@ -201,10 +201,10 @@ sortingKeywords.sortNewPhrases = function(phrases, storeId){
                 console.log(err);
             } 
         });
-        console.log("Process is finished, all Phrases were sorted");
+        
     });
         
-    
+    setTimeout(function() {console.log("Process is finished, all Phrases were sorted");}, 10);
 }
 
 
@@ -228,6 +228,7 @@ function blackCallback(err,keyword,c){
 }
 
 sortingKeywords.reSortVerifiedPhrase = function(phrase, c) {
+    
     var URL = "https://api.mobileaction.co/appstore-keyword-ranking/US/keyword-metadata?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28&keyword="+phrase;
     request(URL, function(error, response, body) {
         if(!error && response.statusCode == 200) {
@@ -266,7 +267,6 @@ function validateBlacklist(){
 }
 
 sortingKeywords.sortVerifiedPhraseFromAppApi = function(keyword, storeId) {
-    console.log(keyword);
     if(sortingKeywords.isKeyMeetRequirements(keyword)){
         sortingKeywords.addKeyToKeywordsCollection(keyword, storeId);
     } else {

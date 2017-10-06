@@ -2,6 +2,7 @@ var express = require("express"),
 request = require("request"),
 iosApp = require("../models/iosApp.js"),
 arrangeData = require("../functions/arrangeDataTypes.js"),
+paginateArray       = require("paginate-array"),
 app = express();
 
 var router = express.Router();
@@ -10,6 +11,8 @@ var fs = require("fs");
 var paginate = require('express-paginate');
 // keep this before all routes that will use pagination 
 router.use(paginate.middleware(10, 200));
+
+
 
 function createIosAppWithApi(storeId, callback){
     var URL = "https://api.mobileaction.co/appstore-appinfo/"+storeId+"?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28"
@@ -41,7 +44,7 @@ function copyDataFromAPPI(appDetails,latestVersion,newApp){
     newApp.title = appDetails.name;
     newApp.normalized = appDetails.name;
     newApp.storeId = appDetails.trackId;
-    newApp.versionString = latestVersion.versionString;
+    // newApp.versionString = latestVersion.versionString;
     newApp.categoryId = appDetails.categoryId;
     newApp.iconUrl = appDetails.iconUrl;
     newApp.price = appDetails.price;
@@ -82,13 +85,16 @@ function validateMmpIds(callback){
         if(!err){
             apps.forEach(function(app){
                 setMMPID(app.storeId);
-            }).then(callback());
+            });
         }
+    })
+    .then(function(){
+        callback();
     });
 };
 
 router.get("/",function(req,res,next){
-    
+  
     var searchTerm = req.query.title;
 
     if(!req.query.title){
@@ -136,9 +142,13 @@ router.get("/",function(req,res,next){
 
 // SHOW PAGE
 router.get("/:id", function(req,res){
+    // console.log(req.query)
     iosApp.findById({_id:req.params.id}).populate("keywords").exec(function(err,app){
         if(!err){
-            res.render("apps/show",{app:app});
+            var collection = app.keywords;
+            // var paginateArr = paginateArray(collection,2,5);
+            var paginateArr = paginateArray(collection,req.query.page,req.query.limit);
+            res.render("apps/show",{app:app,paginate:paginateArr,keywords:paginateArr.data});
         }
         
     });
@@ -225,17 +235,48 @@ router.get("/exportData/appsList", function(req,res){
     });
 });
 
+// The function gets an appId and then delete all keywords in indexes number that are passed
+// as a comma seperated string of indexes. e.g for index (1,4,3,6), indexesString is '1,4,3,6'
+function deleteRefKeywords(appId,idsString,callback){
+    var keysIdArr = idsString.split(',');
+    iosApp.findById(appId ,function(err,foundApp){
+        if(!err){
+            keysIdArr.forEach(function(keyId){
+                //when the user press "DELETE ALL" it takes :i=-1
+                if(keyId==="-1"){
+                    foundApp.keywords = [];
+                    foundApp.save();
+                } else {
+                    var index = (foundApp.keywords).indexOf(keyId);
+                    foundApp.keywords.splice(index,1);
+                    foundApp.save();
+                }
+            });
+        } 
+    }).
+    then(function(){
+        callback();
+    });
+}
 
 // Delete only KEYWORD from the keywords array for a specific app
-router.delete("/:appId/:i", function(req,res){
-   iosApp.findById(req.params.appId, function(err,foundApp){
-      if(!err){
-          foundApp.keywords.splice(req.params.i,1);
-          foundApp.save();
-      } 
-   });
-   res.redirect("/apps/" + req.params.appId);
+router.delete("/:appId/keywords/:i", function(req,res){
+    // when only one keyword is selected the :i is a specific number. (if by clicking the trash icon
+    // the number will be passed as "req.params", if by checkbox the input passed by "req.body")
+    // if the selected was "DELETE ALL" the value passed is "-1".
+    // if its more than one keyword ("delete selected") it's an array of ids.
+    if(!isNaN(Number(req.params.i))){
+        var indexes = req.params.i;
+    } else {
+        var indexes = req.body.indexes;
+    }
+    deleteRefKeywords(req.params.appId,indexes,function(){
+        res.redirect("/apps/" + req.params.appId);
+    });
+    
+    
 });
+
 
 // UPDATE MMPSIDS only
 router.put("/",function(req,res){
@@ -246,3 +287,35 @@ router.put("/",function(req,res){
 });
 
 module.exports = router;
+
+
+
+
+
+
+// !--ALTERNATE FUNCTIONS--!
+// function deleteRefKeywords(storeId,indexesString,callback){
+//     var indexesArr = indexesString.split(',');
+//     iosApp.findById({_id:storeId}).populate("keywords").exec(function(err,foundApp){
+//         // console.log(foundApp.keywords)
+//         if(!err){
+//             for(var i=0; i<indexesArr.length; i++){
+//                 //when the user press "DELETE ALL" it takes to :i=-1
+//                 if(i==="-1"){
+//                     foundApp.keywords = [];
+//                     foundApp.save();
+//                 } else {
+//                     // The splice is for the object at place indexesArr[i]-i since every time the
+//                     // loop runs the object that is next is line, is now one index lower than what it was
+//                     // so I need to detract 1 more than i did in the last time the loop ran
+                    
+//                     foundApp.keywords.splice(indexesArr[i]-i,1);
+//                     foundApp.save();
+//                 }
+//             }
+//         } 
+//     }).
+//     then(function(){
+//         callback();
+//     });
+// }

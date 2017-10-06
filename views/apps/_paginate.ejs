@@ -1,3 +1,4 @@
+
 <% if (paginate.hasNextPages(pageCount) || paginate.hasPreviousPages) { %>
   <div id="pagination" class="navigation well-sm">
     <ul class="pager">
@@ -41,7 +42,18 @@
                    Next&nbsp;| <i class="i fa fa-arrow-circle-right"></i>
                 </a>
           </li>
-       <%  } %>
+       <%  } else { %>
+            <li class="next">
+                <span class="disabled-buttons" disabled>
+                    <i class="i glyphicon glyphicon-step-forward"></i>
+                </span>
+            </li>
+            <li class="next">
+                <span class="disabled-buttons">
+                    Next&nbsp;| <i class="i fa fa-arrow-circle-right"></i>
+                </span >
+            </li>
+        <% } %>
 
     </ul>
   </div>

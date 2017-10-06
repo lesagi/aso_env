@@ -70,6 +70,7 @@ router.get("/:id", function(req,res){
     // use the id to find the specific keyword in the database
     Keyword.findById(req.params.id, function(err,keyword){
         if(err){
+            console.log("dbKeywords routes get /:id error")
             console.log(err);
         } else { //render the show page along with the required params
             res.render("dbKeywords/show",{historyData:keyword.updates, keyword:keyword.keyword})

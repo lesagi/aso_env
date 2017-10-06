@@ -8,7 +8,7 @@ router = express.Router();
 //phrasesCounter INDEX page
 router.get("/", function(req,res){
     res.render("phrasesCounter/index");    
-})
+});
 
 
 //SHOW Keywords list counter

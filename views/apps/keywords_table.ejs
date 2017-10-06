@@ -1,0 +1,46 @@
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Keywords (<%=keywords.length%>)
+                    </th>
+                    <th>
+                        Traffic
+                    </th>
+                    <th>
+                        Difficulty
+                    </th>
+                    <th>
+                        Competition
+                    </th>
+                </tr>
+            </thead>
+            
+        
+            <tbody>
+                <% keywords.forEach(function(keyword,i){ %>
+                    <tr>
+                        <td>
+                            <a href="/dbKeywords/<%=keyword._id%>"><%=keyword.keyword%></a>
+                        </td>
+                        <td>
+                            <!--If in the future I'll decide to use the last cell, this is the way to point at it-->
+                            <!--var updatesLen = keyword["updates"].length-->
+                            <%= keyword["updates"][0]["traffic"] %>
+                        </td>
+                        <td>
+                            <%= keyword["updates"][0]["difficulty"] %>
+                        </td>
+                        <td>
+                            <%= keyword["updates"][0]["competition"] %>
+                            
+                            
+                            <form class="delete-form pull-right" action="/apps/<%=app._id%>/keywords/<%=i%>?_method=DELETE" method="POST">
+                                <button class="btn btn-xs btn-danger"><i class="i glyphicon glyphicon-trash"></i></button>
+                            </form>
+                            <input class="pull-right" id="<%=keyword._id%>" type="checkbox"></input>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>

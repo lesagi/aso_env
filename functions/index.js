@@ -122,6 +122,8 @@ functions.getFirstWord = function(text) {
   return  word
 }
 
+
+
 //textToArray - the function get bunch of text and compile an array with each word as an object in the array
 functions.textToArr = function(text){
 	var regex = new RegExp();

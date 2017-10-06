@@ -1,14 +1,15 @@
-<% if (paginate.hasNextPages(pageCount) || paginate.hasPreviousPages) { %>
+
+<% if ((paginate.currentPage!==1 || paginate.currentPage!==paginate.totalPages) && paginate.totalPages != 0) { %>
   <div id="pagination" class="navigation well-sm">
     <ul class="pager">
-        <% if (paginate.hasPreviousPages){ %>
+        <% if (paginate.currentPage>1){ %>
             <li class="previous">
-                <a href="<%=paginate.href({ page: 1 })%>" class="prev">
+                <a href="?page=1&limit=<%=paginate.perPage%>" class="prev">
                     <i class="i glyphicon glyphicon-step-backward"></i>
                 </a>
             </li>
             <li class="previous">
-                <a href="<%=paginate.href(true)%>" class="prev">
+                <a href="?page=<%=paginate.currentPage-1%>&limit=<%=paginate.perPage%>" class="prev">
                     <i class="i fa fa-arrow-circle-left"></i> | Previous
                 </a>
             </li>
@@ -25,19 +26,19 @@
                 </li>
         <% } %>
         
-      <% if (pages){ %>
-          <% pages.forEach(function(page){ %>
-              <a class="btn btn-default" href="<%=page.url%>"><%=page.number%></a>
+        <% if (paginate.paginatedPages !== undefined){ %>
+          <% (paginate.paginatedPages).forEach(function(page){ %>
+              <a class="btn btn-default" href="?page=<%=page%>&limit=<%=paginate.perPage%>"><%=page%></a>
           <% }); %>
         <% } %>
-      <% if (paginate.hasNextPages(pageCount)){ %>
+      <% if (paginate.currentPage<paginate.totalPages){ %>
           <li class="next">
-              <a href="<%=paginate.href({ page: lastPage })%>" class="next">
+              <a href="?page=<%=paginate.totalPages%>&limit=<%=paginate.perPage%>" class="next">
                   <i class="i glyphicon glyphicon-step-forward"></i>
               </a>
           </li>
           <li class="next">
-              <a href="<%=paginate.href()%>" class="next">
+              <a href="?page=<%=paginate.currentPage+1%>&limit=<%=paginate.perPage%>" class="next">
                    Next&nbsp;| <i class="i fa fa-arrow-circle-right"></i>
                 </a>
           </li>
