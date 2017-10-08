@@ -19,14 +19,14 @@
     "jQuery": "^1.7.4",
     "json2csv": "^3.11.2",
     "json2csv-stream": "^0.1.4",
-    "method-override": "^2.3.9",
+    "method-override": "^2.3.10",
     "mongoose": "^4.10.8",
     "mongoose-csv": "^1.1.0",
     "mongoose-paginate": "^5.0.3",
     "mongoose-to-csv": "^0.1.1",
     "paginate-array": "^2.0.0",
     "regex": "^0.1.1",
-    "request": "^2.81.0"
+    "request": "^2.83.0"
   },
   "devDependencies": {
     "mark.js": "julmot/mark.js"
