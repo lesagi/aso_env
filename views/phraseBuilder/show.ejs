@@ -59,54 +59,6 @@
     </div>
     
     <div class="container container-fluid">
-    	<div class="row">
-    		<div class="col-lg-6">
-    				<table class="table table-bordered table-hover">
-			    		<!--<span id="copyAllBtn" class="pull-right btn btn-primary btn-sm" onclick="copyTable()">Copy All</span>-->
-				    	<tr class="row">
-						    <th class="col-xs-6">Title</th>
-						</tr>
-						<% for(var i=0; i<titleArr.length; i++){ %>
-							<% if(titleArr[i].length>1){ %>
-								<tr class="row">
-						    	    <td class="col-xs-12">
-						    	        <%= titleArr[i] %>
-						    	    </td>
-						    	</tr>
-							<% } %>
-						<% } %>
-			    	</table>
-    		</div>
-    		
-    		<div class="col-lg-6">
-    			<table class="table table-bordered table-hover">
-			    	<tr class="row">
-					    <th class="col-xs-6">Keyword</th>
-					    <th class="col-xs-6">Traffic</th>
-					</tr>
-					
-					<% for(var i=0; i<Math.min(subTitleArr.length,100); i++){ %>
-						<% if(subTitleArr[i].length>1){ %>
-							<tr class="row">
-					    	    <td class="col-xs-12">
-					    	        <%= subTitleArr[i] %>
-					    	    </td>
-					    	    <td>
-					    	    	<% keywords.forEach(function(el){ %>
-						    	    	<% if (el.keyword == subTitleArr[i]) { %>
-						    	    		<%= el.updates[0].traffic; %>
-						    	    	<% } %>
-						    	    <% }); %>
-					    	    </td>
-					    	</tr>
-						<% } %>
-					<% } %>
-		    	</table>
-    		</div>
-    	</div>
-    
-    	
-    	
     </div>
 	
 <% include ../partials/footer.ejs %>
