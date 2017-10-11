@@ -1,61 +1,165 @@
 <% include ../partials/header.ejs %>
-    <script>
-        // Configuring the dropdown list
+   <script>
+       
+        var osField = document.getElementById("osField");
+        var appField = document.getElementById("appField"); 
+        var form = document.querySelector("form");
+        
+        
+        var appLists = <%- JSON.stringify(apps) %>;
         function configureDropDownLists(OpSysDropList,appNameDropList) {
-            
-            var iosApps = <%- JSON.stringify(iosApps) %>;
-            
-            //empty the list to prevent any errors of double loadings
-            appsList.options.length = 0;
-            
-            // create a single option, would be the first option
-            // we need an empty option iin case we won't to add keyword permutation
-            // without make it relates to any app in the DB
-            createOption(appsList,"","Choose an app to be linked with the keywords...");
-            
-            //goes over each app that was passed when the page was rendered
-            iosApps.forEach(function(app){
-              createOption(appsList, app.storeId, app.title); 
-            });
-            
+            var android = appLists["Android"];
+            var ios = appLists["iOS"];
+            var appsArr = [];
+            switch (OpSysDropList.value) {
+                case 'Android':
+                    appNameDropList.options.length = 0;
+                    appsArr = appNamesListToArray(android);
+                    appsArr = appsArr.sort();
+                    appsArr.forEach(function(appName){
+                       createOption(appNameDropList, appName, appName); 
+                    });
+                    break;
+                case 'iOS':
+                    appNameDropList.options.length = 0; 
+                	appsArr = appNamesListToArray(ios);
+                    appsArr = appsArr.sort();
+                    appsArr.forEach(function(appName){
+                       createOption(appNameDropList, appName, appName); 
+                    });
+                    break;
+                    default:
+                        appNameDropList.options.length = 0;
+                    break;
+            }
+        
         }
         
-        // Function creaes one option in the select menu "ddl" (first arg)
-        // with the value="value"(arg) and text="text(arg)"
-        function createOption(ddl, value, text) {
+        function createOption(ddl, text, value) {
             var opt = document.createElement('option');
             opt.value = value;
             opt.text = text;
             ddl.options.add(opt);
         }
         
-        // The dropdown configuration is immidately loads up as the page loads
-        // Done automatic with the setTimeout function and makes sure all variables would be loaded
-        // before the function runs
-        setTimeout(function(){
-            window.onload = configureDropDownLists();
-        },0);
-    </script>
-    
+        function buildLink(){
+            
+        	var apiLink = document.querySelector("#apiLink");
+        	var appName = document.querySelector("#appNameDropList");
+        	var os = document.querySelector("#OpSysDropList");
+        	var country = document.querySelector("#countryField");
+        	
+        
+        	
+        	apiLink.value = "https://api.mobileaction.co/keywords/"+ getMmpId(appName.value,os.value)+"/" +country.value+ "?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28";
+        	
+        	
+        	// Edit the label to the text appear
+        	var apiLabel=document.querySelector("label[for=apiLink]");
+        	apiLabel.innerText = "API Link:"
+        	
+        	// make the well visible
+        	apiLink.classList.add("well");
+        	
+        	//Setting the mmpId input field, so it will be transferred as part of the req.body
+        	var mmpIdField = document.getElementById("mmpId");
+        	mmpIdField.value = getMmpId(appName.value,os.value);
+        	
+        	//Setting the storeId input field, so it will be transferred as part of the req.body
+        	var storeIdField = document.getElementById("storeId");
+            storeIdField.value = getStoreId(appName.value,os.value);
+        }
+        
+        function getMmpId(name,os){
+        	return appLists[os][name]["mmpId"];
+        }
+        
+        function getStoreId(name,os){
+        	return appLists[os][name]["storeId"];
+        }
+        
+      
+        // get the app list from MA (only MA, any other service provider 
+        // will require refactoring this code), and return the apps names
+        // in an array
+        function appNamesListToArray(list){
+        	var arr =[];
+        	for (var appName in list) {
+                arr.push(appName);
+            }
+            return arr;
+        }
+   </script>
+   
+   
+   
+        
     <div class="container container-fluid">
         <h1>Adding Keywords to Mobile Action</h1>
-            
-            <form class="form-group" action="/dataInsert" method="POST">
-                <textarea class="form-control" name="keywords" placeholder="Enter a comma seperated list of keywords..." width="100%"></textarea>
                 
-                <label for="appsList"> App Name: </label>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <select id="appsList" name="storeId" class="btn btn-default dropdown-toggle">
-                            <option value=""></option>
-                        </select>
+
+        <form class="form-group" action="/dataInsert" method="POST" oninput='buildLink();'>
+            <textarea class="form-control" name="keywords" placeholder="Enter a comma seperated list of keywords..." width="100%"></textarea>
+            <ol>
+                <!--OS FIELDS-->
+                <li>
+                    <label for="OpSysDropList"> OS: </label>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <select id="OpSysDropList" name="os" class="btn btn-default dropdown-toggle" onchange="configureDropDownLists(this,document.getElementById('appNameDropList'))" placeholder="iOS">
+                            	<option value="">Please select Operation System</option>
+                            	<option value="iOS">iOS</option>
+                            	<option value="Android">Android</option>
+                        	</select>
+                        </div>
                     </div>
-                </div>
+                </li>
+                <!--OS FIELDS-->
                 
-                <button class="btn btn-success">Add Keywords</button>
-            </form>
+                <li>
+                    <label for="appNameDropList">App Name: </label>
+                    <!--APP NAME FIELDS-->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <select id="appNameDropList" name="appName" class="btn btn-default dropdown-toggle">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--APP NAME FIELDS-->
+                </li>
+                
+                <li>
+                    <label for="countryField"> Country: </label>
+                    <!--COUNTRY FIELDS-->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <select id="countryField" name="country" class="btn btn-default dropdown-toggle" placeholder="">
+                              <option value="BR">BR</option>
+                              <option value="DE">DE</option>
+                              <option value="FR">FR</option>
+                              <option value="GB">GB</option>
+                              <option value="US">US</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--COUNTRY FIELDS-->
+                </li>
+            </ol>
             
             
+                <label for="apiLink"></label>
+                <output id="apiLink" name="apiLink"></output>
+                
+                <input id="mmpId" name="mmpId" hidden></input>
+                <input id="storeId" name="storeId" hidden></input>
+                <button>Add to Mobile Action</button>
+            
+        </form>
     </div>
-            
+    
+
+	<!--<script type="text/javascript" src="/scripts/apiCreator.js"></script>-->
+	
+	
 <% include ../partials/footer.ejs %>
