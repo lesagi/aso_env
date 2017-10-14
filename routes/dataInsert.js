@@ -19,7 +19,7 @@ function arrToSubArrays(arr,limit){
     return bigArr;
 }
 
-function addKeysToApp(mmpId, keywords, limit){
+function addKeysToApp(mmpId, keywords, country, limit){
     var convertedArr = [];
     
     // If the input is not empty, than it will try to convert the csv string to an array
@@ -31,7 +31,7 @@ function addKeysToApp(mmpId, keywords, limit){
         
         // for each sub-array, it converts it's content back to string and add it to Mobile Action through API
         convertedArr.forEach(function(subArr){
-            var URL = "https://api.mobileaction.co/keywords/" + mmpId + "/US?keywords=" + subArr.toString() + "&token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28"
+            var URL = "https://api.mobileaction.co/keywords/" + mmpId + "/" + country +"?keywords=" + subArr.toString() + "&token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28"
             request.post({
               headers: {'content-type' : 'application/x-www-form-urlencoded'},
               url:     URL
@@ -82,7 +82,7 @@ router.post("/", function(req,res){
     // console.log(req.body);
     // find the app to get the Mobile Action Id
     
-    addKeysToApp(req.body.mmpId, req.body.keywords, 200); 
+    addKeysToApp(req.body.mmpId, req.body.keywords, req.body.country, 200); 
    
     
     // the following query retrieved only apps that have mmpId, meaning existed in MA
