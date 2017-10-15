@@ -21,7 +21,7 @@ function arrToSubArrays(arr,limit){
 
 function addKeysToApp(mmpId, keywords, country, limit){
     var convertedArr = [];
-    
+    var delay = 0;
     // If the input is not empty, than it will try to convert the csv string to an array
     if(keywords){
         var keywords = keywords.split(',');
@@ -31,17 +31,7 @@ function addKeysToApp(mmpId, keywords, country, limit){
         
         // for each sub-array, it converts it's content back to string and add it to Mobile Action through API
         convertedArr.forEach(function(subArr){
-            var URL = "https://api.mobileaction.co/keywords/" + mmpId + "/" + country +"?keywords=" + subArr.toString() + "&token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28"
-            request.post({
-              headers: {'content-type' : 'application/x-www-form-urlencoded'},
-              url:     URL
-            }, function(err, response, body){
-              if(err){
-                  console.log(err)
-              } else {
-                  console.log(body);
-              }
-            });
+            doThePostRequest(mmpId, country, subArr.toString(), delay++)
         });
     } else {
         console.log("routes/dataInsert.js Err:");
@@ -49,6 +39,21 @@ function addKeysToApp(mmpId, keywords, country, limit){
     }
 }
 
+function doThePostRequest(mmpId, country, keywords, delay){
+    setTimeout(function(){
+        var URL = "https://api.mobileaction.co/keywords/" + mmpId + "/" + country +"?keywords=" + keywords + "&token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28"
+        request.post({
+          headers: {'content-type' : 'application/x-www-form-urlencoded'},
+          url:     URL
+        }, function(err, response, body){
+          if(err){
+              console.log(err)
+          } else {
+              console.log(body);
+          }
+        });
+    }, delay*500);
+}
 var getAPIresponse = function(url, cb) {
     var request = require('request');
     request(url, function(error, response, body) {
