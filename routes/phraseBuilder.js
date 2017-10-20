@@ -1,6 +1,6 @@
 var express = require("express"),
 functions = require("../functions"),
-arrangeData = require("../functions/arrangeDataTypes.js"),
+convertFromTo = require("../functions/convertFromTo.js"),
 Keyword = require("../models/keyword.js"),
 iosApp = require("../models/iosApp.js"),
 blackKeyword = require("../models/blackKey.js"),
@@ -34,7 +34,7 @@ router.post("/",function(req, res){
    subTitleArr = functions.cleanArray(subTitleArr);
    subTitleArr = functions.removeArrayDuplicates(functions.buildPhrases(subTitleArr,level));
    
-   var csvList = arrangeData.arrayToCsv(subTitleArr,"Keyword");
+   var csvList = convertFromTo.arrayToCsv(subTitleArr,"Keyword");
    
    dbKeywordsAccess.sortNewPhrases(titleArr, req.body.storeId);
    // GET all keywords from the DB so the tables in the show page will have the traffic score alongside the keywords permutation

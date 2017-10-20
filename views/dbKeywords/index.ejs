@@ -31,6 +31,10 @@
                         <% } else if(atoz==-1) { %>
                             <a href="<%=paginate.href({ sort: 1 })%>">Keyword s<i class="i glyphicon glyphicon-sort-by-alphabet"></i></a>
                         <% } %>
+                        
+                        <form class="delete-form pull-right" action="/dbKeywords?_method=DELETE" method="POST">
+                            <button class="btn btn-xs btn-danger">Delete</button>
+                        </form>
                     </th>
                 </tr>
             </thead>

@@ -1,7 +1,7 @@
 var express = require("express"),
 request = require("request"),
 iosApp = require("../models/iosApp.js"),
-arrangeData = require("../functions/arrangeDataTypes.js"),
+convertFromTo = require("../functions/convertFromTo.js"),
 paginateArray       = require("paginate-array"),
 app = express();
 

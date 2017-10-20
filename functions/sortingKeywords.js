@@ -1,100 +1,16 @@
-var express = require("express"),
-Keyword = require("../models/keyword.js"),
-blackKeyword = require("../models/blackKey.js"),
-functions = require("../functions"),
-request = require("request"),
-iosApp  =   require("../models/iosApp.js"),
+var express         = require("express"),
+request             = require("request"),
+functions           = require("../functions"),
+iosApp              = require("../models/iosApp.js"),
+Keyword             = require("../models/keyword.js"),
+blackKeyword        = require("../models/blackKey.js"),
+invalidKeyword      = require("../models/invalidKey.js"),
+addKeyTo            = require("../functions/addKeyTo.js"),
 app = express();
 
-var sortingKeywords = {}; // The main variable that is exported from this file. Contains all the funcitons.
-// Create a new keywords into the Keywords Collection in the DB
-sortingKeywords.addKeyToKeywordsCollection = function(obj, storeId){
-    // The "appstore-keyword-ranking" api call returns slightly different keys for the keywords objects
-    // such as "chance" (Stands for "traffic") instead of "ownIphoneChance"
-    // In order to be able to use this function to sort keywords from this kind of API, the function checks the structure of the keyword
-    // object arg, that is passed to the it.
-    // API: https://www.mobileaction.co/docs/api#appstore-keyword-ranking
-    
-    // if "ownIphoneChance" is one of the object keys, that means it was transferred from the "AppStore Keyword Metadata" API
-    // https://www.mobileaction.co/docs/api#appstore-keyword-metadata
-    if(obj.ownIphoneChance){
-        var newKey = {
-            keyword: obj.keyword,
-            updates:[{
-                traffic: Math.round(obj.searchVolume),
-                difficulty: Math.round(obj.ownIphoneChance),
-                competition: obj.numberOfIphoneApps
-            }]
-        };
-    } else {
-        var newKey = {
-            keyword: obj.keyword,
-            updates:[{
-                traffic: Math.round(obj.searchVolume),
-                difficulty: Math.round(obj.chance),
-                competition: obj.numberOfApps
-            }]
-        };
-    }
+var sortKeys = {}; // The main variable that is exported from this file. Contains all the functions.
 
-    Keyword.create(newKey, function(err, keyword){
-        if(err){
-            console.log(err);
-        } else {
-            if(storeId!==null){
-                addKeywordRefToApp(keyword,storeId)
-            }
-            // console.log("createKey function");
-            // console.log(keyword);
-        }
-    });
-}
-
-// Create a new keywords into the blackListKeyword Collection in the DB
-sortingKeywords.addKeyToblackListKeywordsCollection = function(obj, err){
-    
-    // The "appstore-keyword-ranking" api call returns slightly different keys for the keywords objects
-    // such as "chance" (Stands for "traffic") instead of "ownIphoneChance"
-    // In order to be able to use this function to sort keywords from this kind of API, the function checks the structure of the keyword
-    // object arg, that is passed to the it.
-    // API: https://www.mobileaction.co/docs/api#appstore-keyword-ranking
-    
-    // if "ownIphoneChance" is one of the object keys, that means it was transferred from the "AppStore Keyword Metadata" API
-    // https://www.mobileaction.co/docs/api#appstore-keyword-metadata
-    if(obj.ownIphoneChance!==null){
-        var newKey = {
-            keyword: obj.keyword,
-            traffic: Math.round(obj.searchVolume),
-            difficulty: Math.round(obj.ownIphoneChance),
-            competition: obj.numberOfIphoneApps
-        }
-    } else {
-        var newKey = {
-            keyword: obj.keyword,
-            traffic: Math.round(obj.searchVolume),
-            difficulty: Math.round(obj.chance),
-            competition: obj.numberOfApps
-        }
-    }
-    
-    if(!err){
-        blackKeyword.create(newKey, function(err, keyword){
-            if(err){
-                console.log(err);
-            } else {
-                // console.log("createKey function");
-                // console.log(keyword);
-            }
-        });
-    } else {
-        console.log("Could not add a keyword to the blacklist due the following error:");
-        console.log(err);
-    }
-    
-}
-
-
-sortingKeywords.isKeyMeetRequirements = function(obj){
+sortKeys.isKeyMeetRequirements = function(obj){
     var traffic = obj.searchVolume;
     if(traffic>0){ // can add requirements dynamically in the IF STATEMENT
         return true;
@@ -104,18 +20,17 @@ sortingKeywords.isKeyMeetRequirements = function(obj){
 }
 
 
-
-sortingKeywords.sortVerifiedPhrase = function(phrase, c, storeId) {
+sortKeys.sortVerifiedPhrase = function(phrase, c, storeId) {
     var URL = "https://api.mobileaction.co/appstore-keyword-ranking/US/keyword-metadata?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28&keyword="+phrase;
-    request(URL, function(error, response, body) {
-        if(!error && response.statusCode == 200) {
+    request(URL, function(err, response, body) {
+        if(!err && response.statusCode == 200) {
             var keyword = JSON.parse(body);
-            if(sortingKeywords.isKeyMeetRequirements(keyword)){
-                sortingKeywords.addKeyToKeywordsCollection(keyword, storeId);
+            if(sortKeys.isKeyMeetRequirements(keyword)){
+                addKeyTo.keywordsCollection(keyword, storeId);
             } else {
                 // console.log("doesn't meet rquirement");
                 // console.log(keyword);
-                sortingKeywords.addKeyToblackListKeywordsCollection(keyword);
+                addKeyTo.blackKeysCollection(keyword);
             }
         } else {
             // if(response.statusCode == 429){
@@ -124,24 +39,25 @@ sortingKeywords.sortVerifiedPhrase = function(phrase, c, storeId) {
             // }
             // console.log("Sending the following keyword: --" + phrase + "-- has failed.");
             // console.log("status code: " + response.statusCode);
-            console.log("sortingKeywords.js Functions file - sortVerifiedPhrase function");
+            console.log("sortKeys.js Functions file - sortVerifiedPhrase function error:");
+            console.log(err);
             console.log(phrase);
             // console.log("status message: " + response.statusMessage);
             // console.log(response);
             // console.log("Error: " + error);
-            
         }
-
     });
 };
 
-sortingKeywords.sortVerifiedPhrases = function(phrases){
+
+sortKeys.sortVerifiedPhrases = function(phrases){
     phrases.forEach(function(phrase){
-       sortingKeywords.sortVerifiedPhrase(phrase);
+       sortKeys.sortVerifiedPhrase(phrase);
     });   
 }
 
-sortingKeywords.checkIfPhraseInKeywordsCollection = function(keyword, cb){
+
+sortKeys.checkIfPhraseInKeywordsCollection = function(keyword, cb){
     Keyword.find({keyword:keyword},function(err,keyword){
         if(!err){
             if(keyword.length>0){
@@ -156,9 +72,10 @@ sortingKeywords.checkIfPhraseInKeywordsCollection = function(keyword, cb){
     });
 };
 
+
 function callback(err,keyword,c, storeId){
     if(!err){
-        setTimeout(function(){sortingKeywords.sortVerifiedPhrase(keyword, c, storeId)},c*2000);
+        setTimeout(function(){sortKeys.sortVerifiedPhrase(keyword, c, storeId)},c*1000);
     } else {
         console.log("callback of keywords function: ");
         console.log(err);
@@ -167,7 +84,7 @@ function callback(err,keyword,c, storeId){
 
 
 //Checks if a specific keywords existed in the black list or not
-sortingKeywords.isInBlacklist = function(keyword, callback){ 
+sortKeys.isInBlacklist = function(keyword, callback){ 
     blackKeyword.find({keyword:keyword},function(err,foundKeyword){
         if(foundKeyword.length>0){
             callback(err,true);
@@ -178,38 +95,44 @@ sortingKeywords.isInBlacklist = function(keyword, callback){
 }
 
 
+// var promise = new Promise(function(resolve, reject) {
+//   resolve(1);
+// });
 
-sortingKeywords.sortNewPhrases = function(phrases, storeId){
+// promise.then(function(val) {
+//   console.log(val); // 1
+//   return val + 2;
+// }).then(function(val) {
+//   console.log(val); // 3
+// })
+
+
+sortKeys.sortNewPhrases = function(phrases, storeId){
     var c = 0;
     phrases.forEach(function(keyword){
         // the call back function will set the value of "inBlacklist" to true or false if the keyword is in the DB or not accordingly
-        sortingKeywords.isInBlacklist(keyword,function(err,inBlacklist){
+        sortKeys.isInBlacklist(keyword,function(err,inBlacklist){
             if(!err && !inBlacklist){
                 Keyword.findOne({keyword:keyword},function(err,foundKeyword){
                     if(!err && !foundKeyword){
                         callback(err,keyword,c++,storeId);
-                    } else if (storeId!==null && foundKeyword){
-                        addKeywordRefToApp(foundKeyword,storeId);
+                    } else if (storeId && foundKeyword){
+                        setTimeout(addKeyTo.appKeysArray(foundKeyword,storeId),0);
                     } else {
                         // console.log("already exists: ");
                         // console.log(foundKeyword);
                     }
-                    
                 });
             } else if (err) {
                 console.log("sortNewPhrases err: ");
                 console.log(err);
             } 
         });
-        
     });
-        
-    setTimeout(function() {console.log("Process is finished, all Phrases were sorted");}, 10);
 }
 
 
-
-sortingKeywords.sleep = function(milliseconds) {
+sortKeys.sleep = function(milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
     if ((new Date().getTime() - start) > milliseconds){
@@ -218,32 +141,34 @@ sortingKeywords.sleep = function(milliseconds) {
   }
 }
 
+
 function blackCallback(err,keyword,c){
     if(!err){
-        setTimeout(function(){sortingKeywords.reSortVerifiedPhrase(keyword, c)},c*2000);
+        setTimeout(function(){sortKeys.reSortVerifiedPhrase(keyword, c)},c*1000);
     } else {
         console.log("blackCallback of keywords function: ");
         console.log(err);
     }
 }
 
-sortingKeywords.reSortVerifiedPhrase = function(phrase, c) {
+
+sortKeys.reSortVerifiedPhrase = function(phrase, c) {
     
     var URL = "https://api.mobileaction.co/appstore-keyword-ranking/US/keyword-metadata?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28&keyword="+phrase;
     request(URL, function(error, response, body) {
         if(!error && response.statusCode == 200) {
             var keyword = JSON.parse(body);
-            if(sortingKeywords.isKeyMeetRequirements(keyword)){
+            if(sortKeys.isKeyMeetRequirements(keyword)){
                 blackKeyword.remove({keyword:phrase}, function(err){
                     if(err){
                         console.log("could not remove " + phrase);
                     }
                 });
-                sortingKeywords.addKeyToKeywordsCollection(keyword);
+                addKeyTo.keywordsCollection(keyword);
             } else {
-                console.log("sortingKeywords.reSortVerifiedPhrase err:");
+                console.log("sortKeys.reSortVerifiedPhrase err:");
                 console.log(keyword);
-                sortingKeywords.addKeyToblackListKeywordsCollection(phrase);
+               addKeyTo.blackKeysCollection(phrase);
             }
         } else {
             console.log(phrase);
@@ -251,6 +176,7 @@ sortingKeywords.reSortVerifiedPhrase = function(phrase, c) {
         }
     });
 };
+
 
 //Validate that all black list is really don't meet the requirement OR when requirement is changed, it updates the list
 function validateBlacklist(){
@@ -266,116 +192,169 @@ function validateBlacklist(){
     });
 }
 
-sortingKeywords.sortVerifiedPhraseFromAppApi = function(keyword, storeId) {
-    if(sortingKeywords.isKeyMeetRequirements(keyword)){
-        sortingKeywords.addKeyToKeywordsCollection(keyword, storeId);
+
+sortKeys.sortVerifiedPhraseFromAppApi = function(keyword, storeId, delayTimeOut) {
+    console.log(delayTimeOut)
+    if(keyword.traffic !== -1){
+        setTimeout(function(){
+            if(sortKeys.isKeyMeetRequirements(keyword)){
+                addKeyTo.keywordsCollection(keyword, storeId);
+            } else {
+                // console.log("doesn't meet rquirement");
+                // console.log(keyword);
+                addKeyTo.blackKeysCollection(keyword);
+            }
+        },delayTimeOut*100);
     } else {
-        // console.log("doesn't meet rquirement");
-        // console.log(keyword);
-        sortingKeywords.addKeyToblackListKeywordsCollection(keyword);
+        
     }
+    
 };
+
 
 // the function is dedicated for sorting phrases that were retrieved from the APP API.
 // This way, the system get a bunch of keywords at one time
-sortingKeywords.sortNewPhrasesFromAppApi = function(phrases, storeId){
-    phrases.forEach(function(keyword){
-        var term = keyword.keyword;
-        // the call back function will set the value of "inBlacklist" to false or true if the keyword is in the DB or not accordingly
-        sortingKeywords.isInBlacklist(term,function(err,inBlacklist){
-            if(!err && !inBlacklist){
-                Keyword.findOne({keyword:term},function(err, foundKeyword){
-                    if(!err && !foundKeyword){
-                        sortingKeywords.sortVerifiedPhraseFromAppApi(keyword, storeId)
-                    } else if (storeId!==null && foundKeyword){
-                        addKeywordRefToApp(foundKeyword,storeId);
-                    } else {
-                        // console.log("already exists: ");
-                        // console.log(foundKeyword);
-                    }
-                });
-            } else if (err) {
-                console.log("sortNewPhrases err: ");
-                console.log(err);
-            } 
-        });
-    });
-        
-    console.log("Process is finished, all Phrases were sorted");
-    
+sortKeys.sortNewPhrasesFromAppApi = function(phrases, storeId){
+    var delayTimeOut = 0;
+    sortKeys.fromAppApi(phrases, storeId);
+    // phrases.forEach(function(keyword, i){
+    //     var term = keyword.keyword;
+    //     // the call back function will set the value of "inBlacklist" to false or true if the keyword is in the DB or not accordingly
+    //     sortKeys.isInBlacklist(term,function(err,inBlacklist){
+    //         if(!err && !inBlacklist){
+    //             Keyword.findOne({keyword:term},function(err, foundKeyword){
+    //                 if(!err && !foundKeyword){
+    //                     sortKeys.sortVerifiedPhraseFromAppApi(keyword, storeId, delayTimeOut++);
+    //                 } else {
+    //                     // console.log("already exists: ");
+    //                     // console.log(foundKeyword);
+    //                 }
+                    
+    //                 // Either the word exists in the Db or not, it needs to be checked and added to an app array if required
+    //                 if (storeId!==null){
+    //                     addKeyTo.appKeysArray(foundKeyword,storeId);
+    //                 }
+    //             });
+    //         } else if (err) {
+    //             console.log("sortNewPhrases err: ");
+    //             console.log(err);
+    //         } 
+    //     });
+    // });
 }
 
-
-// Add keyword reference to the app array "keywords"
-function addKeywordRefToApp(keyword,storeId){
-    iosApp.findOne({"storeId":storeId}).populate("keywords").exec(function(err,foundApp){
-        if(!isKeyInArray(foundApp.keywords,keyword.keyword,true)){
-            foundApp.keywords.push(keyword);
-            foundApp.save();
-        } else {
-            
-        }
-    });
-}
-
-// Make sure that the keyword is not already existed in the array
-function isKeyInArray(arr, keyword){
-    var isFound = false;
-    arr.forEach(function(el){
-        if(el.keyword === keyword){
-            isFound = true;
-        }
-    });
-    return isFound;
-}
 
 // validateBlacklist();
-module.exports = sortingKeywords;
+module.exports = sortKeys;
 
 
-
-
-
-
-// sortingKeywords.addKeyToKeywordsCollectionFromAppAPI = function(obj){
-//     var newKey = {
-//         keyword: obj.keyword,
-//         updates:[{
-//             traffic: Math.round(obj.searchVolume),
-//             difficulty: Math.round(obj.chance),
-//             competition: obj.numberOfApps
-//         }]
-//     };
-//     Keyword.create(newKey, function(err, keyword){
-//         if(err){
-//             console.log(err);
-//         } else {
-//             // console.log("createKey function");
-//             // console.log(keyword);
-//         }
+// function excludeBlacked(phrases, storeId){
+//     phrases.forEach(function(keyword, i){
+//         var term = keyword;
+//         // the call back function will set the value of "inBlacklist" to false or true if the keyword is in the DB or not accordingly
+//         blackKeyword.findOne({keyword:term},function(err,key){
+//             if(!err){
+//                 if(key){
+//                     phrases.splice(phrases.indexOf(term),1);
+//                 }
+//             }
+            
+//             if (i == phrases.length-1){
+//                 excludeWhites(phrases)
+//             }
+//         });
 //     });
 // }
 
-// // Create a new keywords into the blackListKeyword Collection in the DB
-// sortingKeywords.addKeyToblackListKeywordsCollectionFromAppAPI = function(obj, err){
-//     var newKey = {
-//         keyword: obj.keyword,
-//         traffic: Math.round(obj.searchVolume),
-//         difficulty: Math.round(obj.chance),
-//         competition: obj.numberOfApps
-//     }
-//     if(!err){
-//         blackKeyword.create(newKey, function(err, keyword){
-//             if(err){
-//                 console.log(err);
-//             } else {
-//                 // console.log("createKey function");
-//                 // console.log(keyword);
-//             }
-//         });
-//     } else {
-//         console.log("Could not add a keyword to the blacklist due the following error:");
-//         console.log(err);
-//     }
+// Using this function will allow you to get back only keywords that aren't existed in the "White list"
+// and these keywords only would be sent over to keep processing
+
+
+function addKeysArrToKeywordsCollection(phrases, storeId){
+    phrases.forEach(function(keyword){
+        addKeyTo.keywordsCollection(keyword, storeId);
+    });
+}
+
+function sortKeysOfWhiteArray(phrases, storeId, callback){
+    // Create a new array to gather all the leftovers = the keywords that aren't existed yet
+    var cleanArr = [];
     
-// }
+    // Go over the passed arr argument, and add the keywords that aren't existed to the cleanArr
+    phrases.forEach(function(keyword,i){
+        var term = keyword.keyword;
+        // the call back function will set the value of "inBlacklist" to false or true if the keyword is in the DB or not accordingly
+        Keyword.findOne({keyword:term},function(err,key){
+            if(!err){
+                if(!key){
+                    cleanArr.push(keyword);
+                }
+            }
+            
+            // Send the leftovers to be added to the DB over the callback function
+            // when i == phrases.length-1 that means that the sorting is over.
+            // All phrases were checked
+            if (i == phrases.length-1){
+                callback(cleanArr, storeId)
+            }
+        });
+    });
+}
+
+
+function addKeysArrToBlackKeysCollection(phrases, storeId){
+    phrases.forEach(function(keyword){
+        addKeyTo.blackKeysCollection(keyword, storeId);
+    });
+}
+
+function sortKeysOfBlackArray(phrases, storeId, callback){
+    // Create a new array to gather all the leftovers = the keywords that aren't existed yet
+    var cleanArr = [];
+    
+    // Go over the passed arr argument, and add the keywords that aren't existed to the cleanArr
+    phrases.forEach(function(keyword,i){
+        var term = keyword.keyword;
+        // the call back function will set the value of "inBlacklist" to false or true if the keyword is in the DB or not accordingly
+        blackKeyword.findOne({keyword:term},function(err,key){
+            if(!err){
+                if(!key){
+                    cleanArr.push(keyword);
+                }
+            }
+            
+            // Send the leftovers to be added to the DB over the callback function
+            // when i == phrases.length-1 that means that the sorting is over.
+            // All phrases were checked
+            if (i == phrases.length-1){
+                callback(cleanArr, storeId)
+            }
+        });
+    });
+}
+
+
+sortKeys.fromAppApi = function(keyObjArr, storeId){
+    var whites = [],
+    blacks = [],
+    invalids = [];
+    keyObjArr.forEach(function(keyObj){
+        if(keyObj.searchVolume == -1) {
+            invalids.push(keyObj);
+        } else if (sortKeys.isKeyMeetRequirements(keyObj)){
+            whites.push(keyObj);
+        } else {
+            blacks.push(keyObj);
+        }
+    });
+    
+    console.log(whites);
+    // var followingFunction = {
+    //     execute: sortKeysOfBlackArray(blacks, storeId, addKeysArrToBlackKeysCollection),
+    //     arr: blacks,
+    //     nextFunc: addKeysArrToBlackKeysCollection
+    // }
+    sortKeysOfWhiteArray(whites, storeId, addKeysArrToKeywordsCollection);
+    // setTimeout(sortKeysOfBlackArray(blacks, storeId, addKeysArrToBlackKeysCollection), 0);
+}
+

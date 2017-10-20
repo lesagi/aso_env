@@ -114,10 +114,21 @@ router.post("/pushToDB",function(req,res){
     request(URL,function(err,res,body){
        if(!err){
           var keywords = (JSON.parse(body)).data
-          sortKeywords.sortNewPhrasesFromAppApi(keywords,req.body.storeId);
+          sortKeywords.fromAppApi(keywords,req.body.storeId);
        } 
     });
     res.redirect("/apiCreator");
+});
+
+router.delete("/", function(req,res){
+   Keyword.remove({}, function(err){
+       if (!err){
+            res.redirect("/dbkeywords");           
+       } else {
+           console.log("err in deleting all keywords in dbKeywords Route");
+           res.redirect("/");
+       }
+   }); 
 });
 
 // GET ALL KEYWORDS from Database Exported to CSV

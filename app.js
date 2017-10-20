@@ -2,6 +2,7 @@ var express = require("express"),
 methodOverride      = require("method-override"),
 bodyParser          = require("body-parser"),
 functions           = require("./functions"),
+sortKeys           = require("./functions/sortingKeywords.js"),
 request             = require("request"),
 iosApp              = require("./models/iosApp.js"),
 mongoose            = require("mongoose"),
@@ -16,7 +17,22 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 
-mongoose.connect(process.env.DATABASEURL);
+var option = {
+    server: {
+        socketOptions: {
+            keepAlive: 300000,
+            connectTimeoutMS: 300000
+        }
+    },
+    replset: {
+        socketOptions: {
+            keepAlive: 300000,
+            connectTimeoutMS: 300000
+        }
+    }
+};
+
+mongoose.connect(process.env.DATABASEURL, option);
 
 // MONGOLAB mongodb://Admin:azsxdcfv@ds133004.mlab.com:33004/aso_env
 //LOCAL mongodb://localhost/aso_env
@@ -48,7 +64,7 @@ app.use("/dataInsert", dataInsertRoutes)
 
 //Home Route
 app.get("/", function(req,res){
-    res.redirect("/phrasesCounter");    
+    res.render("index");    
 });
 
 // =====================
@@ -73,16 +89,9 @@ app.get("/highlighter", function(req,res){
 //   parsedData.forEach(function(){
 //     //  console.log(this) 
 //   });
-// });
+// }); 
 
-app.get("/paginate", function(req,res){
-    iosApp.findById("59cb8f90f87deb0ad52fdc59", function(err, foundApp){
-        
-        
-    })
-   
-});
-     
+
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("Server is running");
 });

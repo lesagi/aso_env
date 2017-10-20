@@ -1,9 +1,7 @@
 var mongoose = require("mongoose");
 
-var serProAppSchema = new mongoose.Schema({
-    storeID: String,
-    MAID: String,
-    title: String
+var tempVarsSchema = new mongoose.Schema({
+    compiledPhrases: Array
 });
 
-module.exports = mongoose.model("serProApp", serProAppSchema);
+module.exports = mongoose.model("tempVars", tempVarsSchema);

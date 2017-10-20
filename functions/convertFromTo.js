@@ -1,9 +1,9 @@
 var express = require("express"),
 app = express();
 
-var arrangeData = {};
-
-arrangeData.arrayToCsv = function(arr,headers) {
+var convertFromTo = {
+    
+arrayToCsv: function(arr,headers) {
    var csv = "data:text/csv;charset=utf-8,"
    csv += headers;
    arr.forEach(function(row) {
@@ -13,9 +13,9 @@ arrangeData.arrayToCsv = function(arr,headers) {
    // console.log("\"" + csv + "\"");
    csv = "\"" + csv + "\"";
    return csv;
-}
+},
 
-arrangeData.convertArrayOfObjectsToCSV = function(args) { 
+objectArrayToCSV: function(args) { 
         var result, ctr, keys, columnDelimiter, lineDelimiter, data;
 
         data = args.data || null;
@@ -44,7 +44,23 @@ arrangeData.convertArrayOfObjectsToCSV = function(args) {
         });
 
         return result;
+},
+
+
+arrToSubArrays: function(arr,limit){
+    var bigArr = [];
+    
+    arr.forEach(function(el,i){
+		if(i%limit === 0){
+			bigArr.push([]);
+		}
+        var bigArrPosition = Math.floor(i/limit);
+        bigArr[bigArrPosition].push(el);
+    });
+    return bigArr;
+}
+
 }
     
     
-module.exports = arrangeData;
+module.exports = convertFromTo;
