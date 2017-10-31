@@ -138,7 +138,7 @@ mobileAction: function(mmpId, keywords, country, limit, callback){
         var keywords = keywords.split(',');
         
         // break apart the big arr to two-dimensional array
-        convertedArr = convertFromTo.arrToubArrays(keywords, limit);
+        convertedArr = convertFromTo.arrToSubArrays(keywords, limit);
         
         // for each sub-array, it converts it's content back to string and add it to Mobile Action through API
         convertedArr.forEach(function(subArr){
@@ -147,11 +147,13 @@ mobileAction: function(mmpId, keywords, country, limit, callback){
               headers: {'content-type' : 'application/x-www-form-urlencoded'},
               url:     URL
             }, function(err, response, body){
+                console.log(body);
               if(err){
                   console.log("adding keywords to MA error, addKeyTo.js file");
                   console.log(err)
-                  callback();
+                 //callback();
               } else {
+                //   console.log(subArr);
                 //   console.log(body);
               }
             });
