@@ -36,7 +36,7 @@ mongoose.connect(process.env.DATABASEURL, option);
 
 // MONGOLAB mongodb://Admin:azsxdcfv@ds133004.mlab.com:33004/aso_env
 //LOCAL mongodb://localhost/aso_env
-// mongoose.connect("mongodb://localhost/aso_env")
+//mongoose.connect("mongodb://localhost/aso_env")
     
 //=================
 // ROUTES IMPORTING
