@@ -26,12 +26,8 @@
     "mongoose-to-csv": "^0.1.1",
     "paginate-array": "^2.0.0",
     "regex": "^0.1.1",
-<<<<<<< HEAD
-    "request": "^2.81.0",
     "request-rate-limiter": "^1.0.2"
-=======
     "request": "^2.83.0"
->>>>>>> ab900ecde9184756ed46a210978d46a33b7f4cf9
   },
   "devDependencies": {
     "mark.js": "julmot/mark.js"
