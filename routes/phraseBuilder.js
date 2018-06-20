@@ -25,9 +25,11 @@ router.get("/", function(req, res){
 router.post("/",function(req, res){
    var level = Number(req.body.level)
    
+   
    var titleArr = functions.textToArr(req.body.title);
    titleArr = functions.cleanArray(titleArr);
    titleArr = functions.removeArrayDuplicates(functions.buildPhrases(titleArr,level));
+   
    
    var subTitleArr = functions.textToArr(req.body.subtitle);
    //level var determines how long the phrase will be in terms of number of keywords

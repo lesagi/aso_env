@@ -7,7 +7,7 @@ arrayToCsv: function(arr,headers) {
    var csv = "data:text/csv;charset=utf-8,"
    csv += headers;
    arr.forEach(function(row) {
-         csv += "\\n" + row;
+         csv += "\\n" + decodeURI(row);
    });
    // console.log(csv);
    // console.log("\"" + csv + "\"");
@@ -48,15 +48,17 @@ objectArrayToCSV: function(args) {
 
 
 arrToSubArrays: function(arr,limit){
+    //in this bigArr each element is an array with up to 'limit' number of keywords
     var bigArr = [];
     
-    arr.forEach(function(el,i){
-		if(i%limit === 0){
-			bigArr.push([]);
-		}
-        var bigArrPosition = Math.floor(i/limit);
-        bigArr[bigArrPosition].push(el);
-    });
+    //numOfChunks - equals the number of rows in the big two dimensional array
+    var numOfChunks = Math.ceil(arr.length/limit);
+    
+    for(var i=0; i<numOfChunks; i++){
+        var first = i*limit;
+        var last = first + limit;
+        bigArr.push(arr.slice(first, last));
+    }
     return bigArr;
 }
 

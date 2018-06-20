@@ -101,10 +101,10 @@ functions.replaceChar = function(text, fChar, dChar){
 functions.getFirstWord = function(text) {
 	var fChar = 0;
 	var lChar = 0;
-
+	
 	//Create regex with a pattern of any Word-Character or geresh(')
   var regex = new RegExp();
-  regex = /(?:(\w|'))/i;
+  regex = /(?:(\w|'|[áâçéèêëîïóôûùüÿñ]))/i;
   text = text.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 
  		//Going over the text until matches a char that doesn't meet the requirements above
@@ -142,21 +142,25 @@ functions.buildPhrases = function(wordsArr, levels){
 	wordsArr.forEach(function(a){
 		newArr.push(a);
 		wordsArr.forEach(function(b){
-
+		var phrase = "";
 			if(levels>1 && !functions.checkRep(a,b)){
-				newArr.push(a+ " " + b);
+				phrase = encodeURI(a+ " " + b);
+				newArr.push(phrase);
 			}
 			wordsArr.forEach(function(c){
 				if(levels>2 && !functions.checkRep(a,b,c)){
-					newArr.push(a+ " " + b + " " + c);
+					phrase = encodeURI(a+ " " + b + " " + c);
+					newArr.push(phrase);
 				}
 				wordsArr.forEach(function(d){
 					if(levels>3 && !functions.checkRep(a,b,c,d)){
-						newArr.push(a+ " " + b + " " + c + " " + d);
+						phrase = encodeURI(a+ " " + b + " " + c + " " + d);
+						newArr.push(phrase);
 					}
 					wordsArr.forEach(function(e){
 						if(levels>4 && !functions.checkRep(a,b,c,d,e)){
-							newArr.push(a+ " " + b + " " + c + " " + d + " " + e);
+							phrase = encodeURI(a+ " " + b + " " + c + " " + d + " " + e);
+							newArr.push(phrase);
 						}
 					});
 				});

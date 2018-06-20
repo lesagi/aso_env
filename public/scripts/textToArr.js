@@ -32,6 +32,7 @@ function textToArr(text){
 	var arr=[];
 	while(regex.test(text)){
 		var word = getFirstWord(text);
+		
 		arr.push(word);
 		text = text.slice(text.search(regex)+word.length);
 	}

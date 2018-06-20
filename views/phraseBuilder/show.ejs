@@ -89,7 +89,7 @@
 						<% if(subTitleArr[i].length>1){ %>
 							<tr class="row">
 					    	    <td class="col-xs-12">
-					    	        <%= subTitleArr[i] %>
+					    	        <%= decodeURI(subTitleArr[i]) %>
 					    	    </td>
 					    	    <td>
 					    	    	<% keywords.forEach(function(el){ %>
