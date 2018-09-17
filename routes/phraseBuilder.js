@@ -26,26 +26,31 @@ router.post("/",function(req, res){
    var level = Number(req.body.level)
    
    
-   var titleArr = functions.textToArr(req.body.title);
-   titleArr = functions.cleanArray(titleArr);
-   titleArr = functions.removeArrayDuplicates(functions.buildPhrases(titleArr,level));
+   // var titleArr = functions.textToArr(req.body.title);
+   // titleArr = functions.cleanArray(titleArr);
+   // titleArr = functions.removeArrayDuplicates(functions.permutate(titleArr,level));
    
    
    var subTitleArr = functions.textToArr(req.body.subtitle);
    //level var determines how long the phrase will be in terms of number of keywords
    subTitleArr = functions.cleanArray(subTitleArr);
-   subTitleArr = functions.removeArrayDuplicates(functions.buildPhrases(subTitleArr,level));
+   subTitleArr = functions.removeArrayDuplicates(subTitleArr);
+   let permutations = functions.permutate(subTitleArr,1);
+   for(let i=2; i<=level; i++){
+     let temp = functions.permutate(subTitleArr,i);
+     permutations = permutations.concat(temp);
+   }
    
-   var csvList = convertFromTo.arrayToCsv(subTitleArr,"Keyword");
+   var csvList = convertFromTo.arrayToCsv(permutations,"Keyword");
    
-   dbKeywordsAccess.sortNewPhrases(titleArr, req.body.storeId);
+   // dbKeywordsAccess.sortNewPhrases(titleArr, req.body.storeId);
    // GET all keywords from the DB so the tables in the show page will have the traffic score alongside the keywords permutation
    Keyword.find({},function(err,keywords){
       if(!err){
          blackKeyword.find({},function(err,blackKeywords){
             if(!err){
                try{
-                  res.render("phraseBuilder/show", {titleArr:titleArr, subTitleArr:subTitleArr, csvList:csvList, keywords:keywords, blackKeywords:blackKeywords});
+                  res.render("phraseBuilder/show", {titleArr:[], subTitleArr:permutations, csvList:csvList, keywords:keywords, blackKeywords:blackKeywords});
                } catch(err) {
                   console.log(err);
                   res.send("request timed out");

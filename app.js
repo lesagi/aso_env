@@ -2,15 +2,15 @@ var express = require("express"),
 methodOverride      = require("method-override"),
 bodyParser          = require("body-parser"),
 functions           = require("./functions"),
-sortKeys           = require("./functions/sortingKeywords.js"),
+sortKeys            = require("./functions/sortingKeywords.js"),
 request             = require("request"),
 iosApp              = require("./models/iosApp.js"),
 mongoose            = require("mongoose"),
 Keyword             = require("./models/keyword.js"),
 blackKeyword        = require("./models/blackKey.js"),
 paginateArray       = require("paginate-array"),
-Regex = require("regex"),
-app = express();
+Regex               = require("regex"),
+app                 = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");

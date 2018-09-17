@@ -47,11 +47,10 @@ router.get('/', function (req, res) {
 router.post("/", function(req,res,next){
     // the following query retrieved only apps that have mmpId, meaning existed in MA
     //({mmpId:{$ne: null}},null,{sort:'normalized'},function(err,iosApps)
-    var limit = 70;
+    var limit = 99;
     if(req.body.country == "US")
-        var limit = 180;
-    // if(req.body.country == "US")
-    //     var limit = 180;
+        var limit = 199;
+        
     addKeysTo.mobileAction(req.body.mmpId, req.body.keywords, req.body.country, limit);
     next()
     },

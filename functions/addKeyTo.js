@@ -6,6 +6,7 @@ var express = require("express"),
     blackKey = require("../models/blackKey.js"),
     invalidKey = require("../models/invalidKey.js"),
     RateLimiter = require('request-rate-limiter'),
+    rp = require('request-promise'),
 
     app = express();
 
@@ -142,40 +143,6 @@ var addKeyTo = {
 
 }
 
-function fireRequest(urls){
-    var URL = urls.pop();
-    
-    var limiter = new RateLimiter({
-          rate: 5              // requests per interval,
-                                // defaults to 60
-        , interval: 60          // interval for the rate, x
-                                // requests per interval,
-                                // defaults to 60
-        , backoffCode: 429      // back off when this status is
-                                // returned, defaults to 429
-        , backoffTime: 30       // back off for n seconds,
-                                // defauts to rate/5
-        , maxWaitingTime: 180   // return errors for requests
-                                // that will have to wait for
-                                // n seconds or more. defaults
-                                // to 5 minutes
-    });
-
-    while(typeof(URL) != "undefined"){
-        limiter.request({headers: { 'content-type': 'application/x-www-form-urlencoded','charset': 'utf-8'}, url: URL, method    : 'post'})
-        .then(function(response){
-            //if(response.statusCode != 200) urls.push(URL);
-            console.log(response.statusCode);
-            // console.log("success");
-        })
-        .catch(function(err){
-            //urls.push(URL);
-            console.log(err);
-        });
-        URL = urls.pop();
-    }
-    console.log("DONE");
-}
 
 function createURLs(mmpId, keywords, country, limit){
     var urls = [];
@@ -194,6 +161,45 @@ function createURLs(mmpId, keywords, country, limit){
     return urls;
 }
 
+
+
+
+function fireRequest(urls){
+    console.log(urls);
+    var URL = urls.pop();
+    
+    var limiter = new RateLimiter({
+          rate: 5               // requests per interval,
+                                // defaults to 60
+        , interval: 60          // interval for the rate, x
+                                // requests per interval,
+                                // defaults to 60
+        , backoffCode: 429      // back off when this status is
+                                // returned, defaults to 429
+        , backoffTime: 30       // back off for n seconds,
+                                // defauts to rate/5
+        , maxWaitingTime: 180   // return errors for requests
+                                // that will have to wait for
+                                // n seconds or more. defaults
+                                // to 5 minutes
+    });
+    
+    while(typeof(URL) != "undefined" && urls.length!=0){
+        limiter.request({headers: { 'content-type': 'application/x-www-form-urlencoded','charset': 'utf-8'}, url: URL, method    : 'post'})
+        .then(function(response){
+            //if(response.statusCode != 200) urls.push(URL);
+            console.log(response.statusCode);
+            // console.log("success");
+        })
+        .catch(function(err){
+            urls.unshift(URL);
+            console.log(err);
+        });
+        URL = urls.pop();
+    }
+    console.log("DONE");
+}
+
 // Make sure that the keyword is not already existed in the array
 function isKeyInArray(arr, keyword) {
     var isFound = false;
@@ -205,4 +211,54 @@ function isKeyInArray(arr, keyword) {
     return isFound;
 }
 
+
+
 module.exports = addKeyTo;
+
+
+
+
+
+// async function fireRequest(URL){
+//     // console.log(URL + "\n");
+//     // Set the headers
+//     var headers = {
+//         'content-type': 'application/x-www-form-urlencoded',
+//         'charset': 'utf-8'
+//     }
+    
+    
+//     // Configure the request
+//     var options = {
+//         url: "https://api.mobileaction.co/keywords/323722/US?keywords=hello&token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28",
+//         method: 'POST',
+//         headers: headers
+//     }
+    
+
+//     return rp({url:URL,headers:headers})
+//             .then((res)=>{
+//                 console.log(res);
+//                 console.log('code : ',res.statusCode);
+//                 console.log('Yay');
+//             })
+//             .catch((err)=>{
+//                 console.log('Error : ',err);
+//             });;
+//     // (err)=>{
+//     //     console.log('error : ',err);
+//     // },
+//     // (res)=>{
+//     //       console.log('code : ',res.statusCode); 
+//     // })
+//         // if(!err && response.statusCode == 200){
+//             console.log('-------------------------');
+//             // console.log(response.statusCode);
+//             //console.log(body);
+//             // return true;
+            
+//         // } 
+//         //else
+//         // return false;
+
+// }

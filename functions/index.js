@@ -1,12 +1,26 @@
 var express = require("express"),
 Regex = require("regex"),
 request = require("request"),
+itertools = require("itertools"),
+
 app = express();
 
 var regex = new RegExp();
 
-
 var functions = {};
+function isIterable(obj) {
+  // checks for null and undefined
+  if (obj == null) {
+    return false;
+  }
+  return typeof obj[Symbol.iterator] === 'function';
+}
+
+functions.permutate = function(array, level){
+    let res = permutations(array, level);
+    let wordsPermutations = res.join(';').replace(/,/gm," ").split(";");
+    return wordsPermutations;
+}
 
 
 functions.cleanArray = function(array){
@@ -137,73 +151,6 @@ functions.textToArr = function(text){
 	return arr;
 }
 
-functions.buildPhrases = function(wordsArr, levels){
-	var newArr = [];
-	wordsArr.forEach(function(a){
-		newArr.push(a);
-		wordsArr.forEach(function(b){
-		var phrase = "";
-			if(levels>1 && !functions.checkRep(a,b)){
-				phrase = encodeURI(a+ " " + b);
-				newArr.push(phrase);
-			}
-			wordsArr.forEach(function(c){
-				if(levels>2 && !functions.checkRep(a,b,c)){
-					phrase = encodeURI(a+ " " + b + " " + c);
-					newArr.push(phrase);
-				}
-				wordsArr.forEach(function(d){
-					if(levels>3 && !functions.checkRep(a,b,c,d)){
-						phrase = encodeURI(a+ " " + b + " " + c + " " + d);
-						newArr.push(phrase);
-					}
-					wordsArr.forEach(function(e){
-						if(levels>4 && !functions.checkRep(a,b,c,d,e)){
-							phrase = encodeURI(a+ " " + b + " " + c + " " + d + " " + e);
-							newArr.push(phrase);
-						}
-					});
-				});
-			});
-		});
-	});
-	return newArr;
-}
-
-
-
-functions.checkRep = function(a,b,c,d,e,levels){
-	var isRep = false;
-
-	if(e && functions.compareEls([a,b,c,d],e)){
-		return true;
-	} else if(d && functions.compareEls([a,b,c],d)) {
-		return true;
-	} else if(c && functions.compareEls([a,b],c)){
-		return true;
-	} else if(b && functions.compareEls([a],b)){
-		return true;
-	} else return false;
-}
-
-
-// Return true if both are equal
-functions.compareTwo = function(a,b,c,d,e){
-	if(a===b){
-		return true;
-	}
-	else return false;
-}
-
-functions.compareEls = function(arr,num){
-	var isFound = false;
-	arr.forEach(function(el){
-		if(num === el){
-			isFound =  true;
-		}
-	});
-	return isFound;
-}
 
 
 functions.sortAppByOS = function(appObj){
@@ -248,3 +195,58 @@ function appNamesListToArray(list){
 
 
 module.exports = functions;
+
+function permutations(array, r) {                                                  
+    // Algorythm copied from Python `itertools.permutations`.                      
+    var n = array.length;                                                          
+    if (r === undefined) {                                                         
+        r = n;                                                                     
+    }                                                                              
+    if (r > n) {                                                                   
+        return;                                                                    
+    }                                                                              
+    var indices = [];                                                              
+    for (var i = 0; i < n; i++) {                                                  
+        indices.push(i);                                                           
+    }                                                                              
+    var cycles = [];                                                               
+    for (var i = n; i > n - r; i-- ) {                                             
+        cycles.push(i);                                                            
+    }                                                                              
+    var results = [];                                                              
+    var res = [];                                                                  
+    for (var k = 0; k < r; k++) {                                                  
+        res.push(array[indices[k]]);                                               
+    }                                                                              
+    results.push(res);                                                             
+                                                                                   
+    var broken = false;                                                            
+    while (n > 0) {                                                                
+        for (var i = r - 1; i >= 0; i--) {                                         
+            cycles[i]--;                                                           
+            if (cycles[i] === 0) {                                                 
+                indices = indices.slice(0, i).concat(                              
+                    indices.slice(i+1).concat(
+                        indices.slice(i, i+1)));             
+                cycles[i] = n - i;                                                 
+                broken = false;                                                    
+            } else {                                                               
+                var j = cycles[i];                                                 
+                var x = indices[i];                                                
+                indices[i] = indices[n - j];                          
+                indices[n - j] = x;                                   
+                var res = [];
+                for (var k = 0; k < r; k++) {                        
+                    res.push(array[indices[k]]);                                   
+                }                                                                  
+                results.push(res);                                                 
+                broken = true;                                                     
+                break;                                                             
+            }                                                                      
+        }                                                                          
+        if (broken === false) {                                                    
+            break;                                                                 
+        }                                                                          
+    }                                                                              
+    return results;                                                                
+}         
