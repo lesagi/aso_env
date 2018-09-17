@@ -1,7 +1,6 @@
 var express = require("express"),
 Regex = require("regex"),
 request = require("request"),
-itertools = require("itertools"),
 
 app = express();
 
