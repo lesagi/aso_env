@@ -27,7 +27,6 @@ makeRequests.sendData = (urls) => {
       }));
           if(response.ok){
               const jsonResponse = await response.json();
-                console.log(jsonResponse);
               if(!jsonResponse.success){
                   console.log(url);
               }
@@ -43,28 +42,4 @@ makeRequests.sendData = (urls) => {
     });
 }
 
-// makeRequests.sendData = (urls) => {
-//     urls.forEach(async url => {
-//         console.log(url);
-//       try {
-//           const response = await fetch(url, {
-//           'method': 'POST',
-//           'headers': {
-//               'content-type': 'application/x-www-form-urlencoded',
-//               'charset': 'utf-8'
-//           }
-//       });
-//           if(response.ok){
-//               console.log(response);
-//           }
-//           throw new Error("Something went wrong");
-//       } catch(error) {
-//           console.log(error);
-//       }
-//     });
-// }
-
 module.exports = makeRequests;
-
-
-// https://api.mobileaction.co/keywords/351506/US?keywords=hello,what,is,this&token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28
