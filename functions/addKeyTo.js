@@ -7,7 +7,7 @@ var express = require("express"),
     invalidKey = require("../models/invalidKey.js"),
     RateLimiter = require('request-rate-limiter'),
     rp = require('request-promise'),
-
+    makeRequests = require('../lib/index'),
     app = express();
 
 
@@ -138,23 +138,27 @@ var addKeyTo = {
 
     mobileAction: function(mmpId, keywords, country, limit) {
         var urls = createURLs(mmpId, keywords, country, limit);
-        fireRequest(urls);
+        makeRequests.sendData(urls);
+        // fireRequest(urls);
     }
 
 }
 
 
 function createURLs(mmpId, keywords, country, limit){
+    
     var urls = [];
     if (keywords) { // If the input is not empty, than it will try to convert the csv string to array
         var keywords = keywords.split(',');
         
         var convertedArr = convertFromTo.arrToSubArrays(keywords, limit); // break apart the big arr to two-dimensional array
+        let c = 0;
         while(convertedArr.length>0){
             var words = convertedArr.pop();
-            var URL = "https://api.mobileaction.co/keywords/" + mmpId + "/" + country + "?keywords=" + words.toString() + "&token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28";
-            var encoded = encodeURI(URL); //encoding special chars
-            urls.push(encoded);
+            let encodedWords = encodeURIComponent(words.toString());
+            console.log(encodedWords);
+            var URL = "https://api.mobileaction.co/keywords/" + mmpId + "/" + country + "?keywords=" + encodedWords + "&token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28";
+            urls.push(URL);
         }
     }
     
@@ -165,9 +169,9 @@ function createURLs(mmpId, keywords, country, limit){
 
 
 function fireRequest(urls){
-    console.log(urls);
-    var URL = urls.pop();
     
+    var URL = urls.pop();
+    console.log(URL);
     var limiter = new RateLimiter({
           rate: 5               // requests per interval,
                                 // defaults to 60
