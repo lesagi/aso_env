@@ -42,8 +42,7 @@ mongoose.connect(process.env.DATABASEURL, option);
 // ROUTES IMPORTING
 //=================
 
-var dataMultipleInsertRoutes    = require("./routes/dataMultipleInsert.js"),
-phrasesCounterRoutes            = require("./routes/phrasesCounter.js"),
+var phrasesCounterRoutes            = require("./routes/phrasesCounter.js"),
 phraseBuilderRoutes             = require("./routes/phraseBuilder.js"),
 apiCreatorRoutes                = require("./routes/apiCreator.js"),
 dbKeywordsRoutes                = require("./routes/dbKeywords.js"),
@@ -58,7 +57,6 @@ app.use("/apiCreator", apiCreatorRoutes);
 app.use("/dbKeywords", dbKeywordsRoutes);
 app.use("/apps", appsRoutes);
 app.use("/dataInsert", dataInsertRoutes);
-app.use("/dataMultipleInsert", dataMultipleInsertRoutes);
 
 // =====================
 // Setting the routes

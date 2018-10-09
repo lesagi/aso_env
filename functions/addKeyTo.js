@@ -136,7 +136,11 @@ var addKeyTo = {
     },
 
 
-    mobileAction: function(mmpId, keywords, country, limit) {
+    mobileAction: function(mmpId, keywords, country) {
+        var limit = 200;
+        if(country != "US")
+            limit = 100;
+        
         var urls = createURLs(mmpId, keywords, country, limit);
         makeRequests.sendData(urls);
         // fireRequest(urls);
