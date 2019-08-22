@@ -1,5 +1,4 @@
 var express = require("express"),
-Keyword = require("../models/keyword.js"),
 functions = require("../functions"),
 request = require("request"),
 app = express();

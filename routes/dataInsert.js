@@ -1,7 +1,6 @@
 var express = require("express"),
 request = require("request"),
 addKeysTo = require("../functions/addKeyTo.js"),
-iosApp  = require("../models/iosApp.js"),
 functions = require("../functions"),
 app = express();
 
@@ -47,7 +46,6 @@ router.get('/', function (req, res) {
 router.post("/", function(req,res,next){
     // the following query retrieved only apps that have mmpId, meaning existed in MA
     //({mmpId:{$ne: null}},null,{sort:'normalized'},function(err,iosApps)
-    console.log(Array.isArray(req.body.country));
     if(req.body.keywords != "" && req.body.country != undefined){
         if(Array.isArray(req.body.country)){
             req.body.country.forEach(function(countryCode){

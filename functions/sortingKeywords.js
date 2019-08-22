@@ -1,10 +1,6 @@
 var express         = require("express"),
 request             = require("request"),
 functions           = require("../functions"),
-iosApp              = require("../models/iosApp.js"),
-Keyword             = require("../models/keyword.js"),
-blackKeyword        = require("../models/blackKey.js"),
-invalidKeyword      = require("../models/invalidKey.js"),
 addKeyTo            = require("../functions/addKeyTo.js"),
 app = express();
 

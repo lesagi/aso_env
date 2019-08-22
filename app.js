@@ -4,10 +4,6 @@ bodyParser          = require("body-parser"),
 functions           = require("./functions"),
 sortKeys            = require("./functions/sortingKeywords.js"),
 request             = require("request"),
-iosApp              = require("./models/iosApp.js"),
-mongoose            = require("mongoose"),
-Keyword             = require("./models/keyword.js"),
-blackKeyword        = require("./models/blackKey.js"),
 paginateArray       = require("paginate-array"),
 Regex               = require("regex"),
 app                 = express();
@@ -17,26 +13,6 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 
-var option = {
-    server: {
-        socketOptions: {
-            keepAlive: 300000,
-            connectTimeoutMS: 300000
-        }
-    },
-    replset: {
-        socketOptions: {
-            keepAlive: 300000,
-            connectTimeoutMS: 300000
-        }
-    }
-};
-
-mongoose.connect(process.env.DATABASEURL, option);
-
-// MONGOLAB mongodb://Admin:azsxdcfv@ds133004.mlab.com:33004/aso_env
-//LOCAL mongodb://localhost/aso_env
-//mongoose.connect("mongodb://localhost/aso_env")
     
 //=================
 // ROUTES IMPORTING

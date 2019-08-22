@@ -1,9 +1,6 @@
 var express = require("express"),
 functions = require("../functions"),
 convertFromTo = require("../functions/convertFromTo.js"),
-Keyword = require("../models/keyword.js"),
-iosApp = require("../models/iosApp.js"),
-blackKeyword = require("../models/blackKey.js"),
 dbKeywordsAccess = require("../functions/sortingKeywords.js"),
 app = express();
 

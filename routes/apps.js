@@ -1,6 +1,5 @@
 var express = require("express"),
 request = require("request"),
-iosApp = require("../models/iosApp.js"),
 convertFromTo = require("../functions/convertFromTo.js"),
 paginateArray       = require("paginate-array"),
 app = express();

@@ -3,8 +3,6 @@ var express = require("express"),
     
 import Bottleneck from "bottleneck";
  
-// ECMAScript 2015
-import regeneratorRuntime from "regenerator-runtime";
 
 const limiter = new Bottleneck({
     maxConcurrent: 1,
@@ -33,7 +31,10 @@ makeRequests.sendData = (urls) => {
                 
           }
           
-          else throw new Error("Something went wrong");
+          else {
+
+            throw new Error("Something went wrong")
+        };
           const counts = limiter.counts();
           console.log(counts);
       } catch(error) {
