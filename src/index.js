@@ -28,7 +28,7 @@ makeRequests.sendData = (urls) => {
             if(response.ok){
                 const jsonResponse = await response.json();
                 if(!jsonResponse.success){
-                    console.log(url);
+                    console.log(jsonResponse.message);
                 }
           }
           const counts = limiter.counts();

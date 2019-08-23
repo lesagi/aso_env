@@ -22,27 +22,19 @@ var addKeyTo = {
             apiRequestHandler.getAppKeysInMa(mmpId, country, function(err, keysObj){
                 if(!err){
                     var keys = sortKeys.duplicatesRemoved(keywords, keysObj.keywords);
-                    console.log(country);
-                    console.log(keysObj.keywords.length);
-                    console.log(keys.length);
-                    
-                    var urls = createURLs(mmpId, keys, country, country == 'US' ? 200 : 100);
+                    var urls = createURLs(mmpId, keys, country, country == 'US' ? 100 : 100);
                     makeRequests.sendData(urls);
                 }
-
             });
         });
     }
-
 }
 
 
 function createURLs(mmpId, keywords, country, limit){
-    
     var urls = [];
     if (keywords) { // If the input is not empty, than it will try to convert the csv string to array
         var convertedArr = convertFromTo.arrToSubArrays(keywords, limit); // break apart the big arr to two-dimensional array
-        let c = 0;
         while(convertedArr.length>0){
             var words = convertedArr.pop();
             let encodedWords = encodeURIComponent(words.toString());
@@ -50,7 +42,6 @@ function createURLs(mmpId, keywords, country, limit){
             urls.push(URL);
         }
     }
-    
     return urls;
 }
 
