@@ -1,7 +1,7 @@
 var express = require("express"),
     request = require("request"),
     convertFromTo = require("../functions/convertFromTo.js"),
-    makeRequests = require('../lib/index'),
+    makeRequests = require('../lib/index.js'),
     sortKeys = require('../functions/sortingKeywords.js'),
     apiRequestHandler = require('../functions/apiReqeusts.js'),
     app = express();
@@ -22,8 +22,10 @@ var addKeyTo = {
             apiRequestHandler.getAppKeysInMa(mmpId, country, function(err, keysObj){
                 if(!err){
                     var keys = sortKeys.duplicatesRemoved(keywords, keysObj.keywords);
-                    var urls = createURLs(mmpId, keys, country, country == 'US' ? 100 : 100);
-                    makeRequests.sendData(urls);
+                    if(keys.length > 0){
+                        var urls = createURLs(mmpId, keys, country, country == 'US' ? 100 : 100);
+                        makeRequests.sendData(urls);
+                    }
                 }
             });
         });
