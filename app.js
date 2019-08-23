@@ -2,7 +2,6 @@ var express = require("express"),
 methodOverride      = require("method-override"),
 bodyParser          = require("body-parser"),
 functions           = require("./functions"),
-sortKeys            = require("./functions/sortingKeywords.js"),
 request             = require("request"),
 paginateArray       = require("paginate-array"),
 Regex               = require("regex"),
@@ -21,18 +20,14 @@ app.use(methodOverride("_method"));
 var phrasesCounterRoutes            = require("./routes/phrasesCounter.js"),
 phraseBuilderRoutes             = require("./routes/phraseBuilder.js"),
 apiCreatorRoutes                = require("./routes/apiCreator.js"),
-dbKeywordsRoutes                = require("./routes/dbKeywords.js"),
 wordExecRoutes                  = require("./routes/wordExec.js"),
-dataInsertRoutes                = require("./routes/dataInsert.js"),
-appsRoutes                      = require("./routes/apps.js");
+wordsInjectionRoutes                = require("./routes/wordsInjection.js");
 
 app.use("/phrasesCounter", phrasesCounterRoutes);
 app.use("/wordExec", wordExecRoutes);
 app.use("/phraseBuilder", phraseBuilderRoutes);
 app.use("/apiCreator", apiCreatorRoutes);
-app.use("/dbKeywords", dbKeywordsRoutes);
-app.use("/apps", appsRoutes);
-app.use("/dataInsert", dataInsertRoutes);
+app.use("/wordsInjection", wordsInjectionRoutes);
 
 // =====================
 // Setting the routes

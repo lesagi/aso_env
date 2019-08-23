@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>ASO</title>
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
@@ -10,38 +10,35 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	
-	<nav class="navbar navbar-default">
-	  <div class="container container-fluid">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-	        <span class="sr-only">Toggle navigation</span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-	      <a class="navbar-brand" href="/">ASO Enviornement</a>
-	    </div>
+	<div class="container"></div>
+	<nav class="navbar navbar-expand-lg navbar-light text-light bg-transparent">
+		<a class="navbar-brand" href="/"><img src="images/moburst-logo.png" alt="moburst-logo"/></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		  <span class="navbar-toggler-icon"></span>
+		</button>
+	  
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		  <ul class="navbar-nav mr-auto">
+			<li class="nav-item dropdown">
+			  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Tools
+			  </a>
+			  <div class="dropdown-menu moburst-bg-color" aria-labelledby="navbarDropdown">
+				<a class="dropdown-item text-light" href="/phrasesCounter">Phrases Counter</a>
+				<a class="dropdown-item text-light" href="/commaSeperator">Comma Seperator</a>
+				<a class="dropdown-item text-light" href="/wordExec">Word Seperator</a>
+				<a class="dropdown-item text-light" href="/apiCreator">API Links</a>
+				<a class="dropdown-item text-light" href="/dbKeywords">DB Keywords</a>
+				<a class="dropdown-item text-light" href="/highlighter">Highlighter</a>
+				<a class="dropdown-item text-light" href="/phraseBuilder">Phrase Builder</a>
+				<a class="dropdown-item text-light" href="/wordsInjection">Add KWs to MobileAction</a>
+			  </div>
+			</li>
+		  </ul>
+		  
+		</div>
+	  </nav>
 
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      <ul class="nav navbar-nav">
-	        <li class="dropdown">
-	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ASO Tools<span class="caret"></span></a>
-	          <ul class="dropdown-menu">
-	            <li><a href="/phrasesCounter">Phrases Counter</a></li>
-	            <li><a href="/commaSeperator">Comma Seperator</a></li>
-	            <li><a href="/wordExec">Word Seperator</a></li>
-	            <li><a href="/apiCreator">API Links</a></li>
-	            <li><a href="/dbKeywords">DB Keywords</a></li>
-	            <li><a href="/highlighter">Highlighter</a></li>
-	            <li><a href="/phraseBuilder">Phrase Builder</a></li>
-	            <li><a href="/dataInsert">Add KWs to MobileAction</a></li>
-	          </ul>
-	        </li>
-	        <li><a href="/apps">Apps</a></li>
-	      </ul>	      
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
+	
+	<div class="jumbotron jumbotron-fluid">
+	  </div>

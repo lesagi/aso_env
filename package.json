@@ -31,11 +31,10 @@
     "morgan": "^1.9.1",
     "nodemon": "^1.19.1",
     "paginate-array": "^2.1.0",
-    "regenerator-runtime": "^0.12.1",
+    "regenerator-runtime": "^0.13.3",
     "regex": "^0.1.1",
     "request": "^2.83.0",
-    "request-promise": "^4.2.4",
-    "request-rate-limiter": "^1.0.2"
+    "request-promise": "^4.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",

@@ -1,9 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.moburst-bg-color{
+    background-color: rgb(27,27,27);
+}
+
 textarea {
     margin-bottom: 10px;
 }
 
 .btn {
     margin: 2px;
+}
+
+.jumbotron{
+    background-image: url("/images/moburst-jumbotron.jpeg");
+    background-position: center; 
+    height: 200px;
 }
 
 
@@ -78,4 +93,17 @@ a h4{
 .null-mmpid{
     color:red;
 }
+
+.navbar-brand > img{
+    padding: 5px;
+    height: 60px;
+}
+
+.navbar{
+    margin-bottom: 0;
+}
+
+
+
+
 
