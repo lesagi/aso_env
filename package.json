@@ -2,7 +2,8 @@
   "name": "asowebdev",
   "version": "1.0.0",
   "engines": {
-    "node": "8.9.4"
+    "node": "8.9.4",
+    "npm": "6.x"
   },
   "description": "",
   "main": "app.js",

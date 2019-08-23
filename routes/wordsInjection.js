@@ -24,7 +24,7 @@ router.get('/', function (req, res) {
 
 router.post("/", function(req,res,next){
     if(req.body.keywords.length != 0 && req.body.country != undefined){
-        addKeysTo.mobileAction(req.body.mmpId, req.body.keywords.split(new RegExp("[\\W]*(?<=\\,)[\\W]*","gim")), [].concat(req.body.country));
+        addKeysTo.mobileAction(req.body.mmpId, req.body.keywords.split(/[\W]*(?<=\,)[\W]*/gim), [].concat(req.body.country));
     }
     res.redirect("back");
 });
