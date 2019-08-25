@@ -9,16 +9,8 @@ var router = express.Router();
 
 router.get('/', function (req, res) {
     var URL = "https://api.mobileaction.co/apps/?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28";
-    var body =  apiRequestsHandler.makeApiCall(URL, function(err, body) {
-        if(!err){
-            // This is run in a callback once the request is done.    
-            var apps = functions.sortAppByOS(body);
-            res.render("wordsInjectionDir/index",{apps:apps}); 
-        } else {
-            console.log("routes/wordsInjection.js Err:");
-            console.log(err);
-        }
-    });
+    apiRequestsHandler.makeApiCall(URL)
+    .then(body => res.render("wordsInjectionDir/index",{apps:functions.sortAppByOS(body)}));
 });
 
 

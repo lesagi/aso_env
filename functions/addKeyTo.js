@@ -19,15 +19,15 @@ var addKeyTo = {
     // https://www.mobileaction.co/docs/api#appstore-keyword-metadata
     mobileAction: function(mmpId, keywords, countries) {
         countries.forEach(function(country){
-            apiRequestHandler.getAppKeysInMa(mmpId, country, function(err, keysObj){
-                if(!err){
-                    var keys = sortKeys.duplicatesRemoved(keywords, keysObj.keywords);
-                    if(keys.length > 0){
-                        var urls = createURLs(mmpId, keys, country, country == 'US' ? 100 : 100);
-                        reqSender.sendData(urls);
-                    }
+            apiRequestHandler.getAppKeysInMa(mmpId, country)
+            .then((keysObj) =>{
+                var keys = sortKeys.duplicatesRemoved(keywords, keysObj.keywords);
+                if(keys.length > 0){
+                    var urls = createURLs(mmpId, keys, country, country == 'US' ? 100 : 100);
+                    reqSender.sendData(urls);
                 }
-            });
+            })
+            .catch((err) => console.log(err));
         });
     }
 }

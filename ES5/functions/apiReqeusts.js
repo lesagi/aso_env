@@ -31,7 +31,7 @@ var parseRes = function parseRes(res) {
     return keysObj;
 };
 
-apiRequestHandler.getAppKeysInMa = function (appId, country, cb) {
+apiRequestHandler.getAppKeysInMa = function (appId, country) {
     return new Promise(function (resolved, rejected) {
         var url = 'https://api.mobileaction.co/keywords/' + appId + '/' + country + '?token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28';
         apiRequestHandler.makeApiCall(url).then(function (res) {

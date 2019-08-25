@@ -17,11 +17,11 @@ app.use(methodOverride("_method"));
 // ROUTES IMPORTING
 //=================
 
-var phrasesCounterRoutes            = require("./routes/phrasesCounter.js"),
-phraseBuilderRoutes             = require("./routes/phraseBuilder.js"),
-apiCreatorRoutes                = require("./routes/apiCreator.js"),
-wordExecRoutes                  = require("./routes/wordExec.js"),
-wordsInjectionRoutes                = require("./routes/wordsInjection.js");
+var phrasesCounterRoutes            = require("./ES5/routes/phrasesCounter.js"),
+phraseBuilderRoutes             = require("./ES5/routes/phraseBuilder.js"),
+apiCreatorRoutes                = require("./ES5/routes/apiCreator.js"),
+wordExecRoutes                  = require("./ES5/routes/wordExec.js"),
+wordsInjectionRoutes                = require("./ES5/routes/wordsInjection.js");
 
 app.use("/phrasesCounter", phrasesCounterRoutes);
 app.use("/wordExec", wordExecRoutes);
