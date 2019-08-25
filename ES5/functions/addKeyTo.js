@@ -1,3 +1,5 @@
+"use strict";
+
 var express = require("express"),
     request = require("request"),
     sortKeys = require('../functions/sortingKeywords.js'),
@@ -5,7 +7,6 @@ var express = require("express"),
     apiRequestHandler = require('../functions/apiReqeusts.js'),
     reqSender = require('../functions/requestSender.js'),
     app = express();
-
 
 var addKeyTo = {
 
@@ -17,12 +18,12 @@ var addKeyTo = {
 
     // if "ownIphoneChance" is one of the object keys, that means it was transferred from the "AppStore Keyword Metadata" API
     // https://www.mobileaction.co/docs/api#appstore-keyword-metadata
-    mobileAction: function(mmpId, keywords, countries) {
-        countries.forEach(function(country){
-            apiRequestHandler.getAppKeysInMa(mmpId, country, function(err, keysObj){
-                if(!err){
+    mobileAction: function mobileAction(mmpId, keywords, countries) {
+        countries.forEach(function (country) {
+            apiRequestHandler.getAppKeysInMa(mmpId, country, function (err, keysObj) {
+                if (!err) {
                     var keys = sortKeys.duplicatesRemoved(keywords, keysObj.keywords);
-                    if(keys.length > 0){
+                    if (keys.length > 0) {
                         var urls = createURLs(mmpId, keys, country, country == 'US' ? 100 : 100);
                         reqSender.sendData(urls);
                     }
@@ -30,16 +31,16 @@ var addKeyTo = {
             });
         });
     }
-}
+};
 
-
-function createURLs(mmpId, keywords, country, limit){
+function createURLs(mmpId, keywords, country, limit) {
     var urls = [];
-    if (keywords) { // If the input is not empty, than it will try to convert the csv string to array
+    if (keywords) {
+        // If the input is not empty, than it will try to convert the csv string to array
         var convertedArr = convertFromTo.arrToSubArrays(keywords, limit); // break apart the big arr to two-dimensional array
-        while(convertedArr.length>0){
+        while (convertedArr.length > 0) {
             var words = convertedArr.pop();
-            let encodedWords = encodeURIComponent(words.toString());
+            var encodedWords = encodeURIComponent(words.toString());
             var URL = "https://api.mobileaction.co/keywords/" + mmpId + "/" + country + "?keywords=" + encodedWords + "&token=569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28";
             urls.push(URL);
         }

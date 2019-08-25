@@ -1,10 +1,8 @@
 var express = require("express"),
+    Bottleneck = require("bottleneck"),
+    regeneratorRuntime = require("regenerator-runtime"),
     app = express();
     
-import Bottleneck from "bottleneck";
- 
-// ECMAScript 2015
-import regeneratorRuntime from "regenerator-runtime";
 
 const limiter = new Bottleneck({
     maxConcurrent: 1,
@@ -13,7 +11,7 @@ const limiter = new Bottleneck({
 
 const makeRequests = {};
 
-import "isomorphic-fetch";
+require("isomorphic-fetch");
 
 makeRequests.sendData = (urls) => {
     urls.forEach(async url => {
