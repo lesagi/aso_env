@@ -1,10 +1,6 @@
 var express = require("express"),
 methodOverride      = require("method-override"),
 bodyParser          = require("body-parser"),
-functions           = require("./functions"),
-request             = require("request"),
-paginateArray       = require("paginate-array"),
-Regex               = require("regex"),
 app                 = express();
 
 app.use(bodyParser.urlencoded({extended: true}));

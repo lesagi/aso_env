@@ -1,11 +1,6 @@
 "use strict";
 
-var express = require("express"),
-    Regex = require("regex"),
-    request = require("request"),
-    app = express();
-
-var regex = new RegExp();
+var express = require("express");
 
 var functions = {};
 function isIterable(obj) {

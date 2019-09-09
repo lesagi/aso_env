@@ -21,19 +21,12 @@
     "ejs": "^2.6.2",
     "es6-promise": "^4.2.8",
     "express": "^4.17.1",
-    "express-paginate": "^0.3.0",
-    "fs": "0.0.1-security",
-    "googleapis": "^21.3.0",
     "isomorphic-fetch": "^2.2.1",
-    "jQuery": "^1.7.4",
-    "json2csv": "^3.11.5",
-    "json2csv-stream": "^0.1.4",
+    "mark.js": "^8.11.1",
     "method-override": "^2.3.10",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.1",
-    "paginate-array": "^2.1.0",
     "regenerator-runtime": "^0.13.3",
-    "regex": "^0.1.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.4"
   },
@@ -44,7 +37,6 @@
     "babel-plugin-transform-es2015-unicode-regex": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
-    "mark.js": "julmot/mark.js",
     "rimraf": "^3.0.0"
   }
 }

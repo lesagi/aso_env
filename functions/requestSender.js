@@ -6,7 +6,7 @@ var express = require("express"),
 
 const limiter = new Bottleneck({
     maxConcurrent: 1,
-    minTime: 333
+    minTime: 1000
 });
 
 const makeRequests = {};
