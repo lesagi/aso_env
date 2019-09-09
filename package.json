@@ -9,7 +9,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && node ./app.js",
+    "start": "node ./app.js",
     "build": "babel ./functions -d ./ES5/functions && babel ./routes -d ./ES5/routes"
   },
   "author": "Sagi Levi",
