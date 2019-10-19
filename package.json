@@ -10,7 +10,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./app.js",
-    "build": "babel ./functions -d ./ES5/functions && babel ./routes -d ./ES5/routes"
+    "build": "babel ./functions -d ./ES5/functions && babel ./routes -d ./ES5/routes",
+    "upload": "npm run build && npm start"
   },
   "author": "Sagi Levi",
   "license": "ISC",

@@ -23,7 +23,7 @@ var addKeyTo = {
             .then((keysObj) =>{
                 var keys = sortKeys.duplicatesRemoved(keywords, keysObj.keywords);
                 if(keys.length > 0){
-                    var urls = createURLs(mmpId, keys, country, country == 'US' ? 100 : 100);
+                    var urls = createURLs(mmpId, keys, country, country == 'US' ? 80 : 80);
                     reqSender.sendData(urls);
                 }
             })
