@@ -14,9 +14,10 @@ app.use(methodOverride("_method"));
 //=================
 
 var phrasesCounterRoutes            = require("./ES5/routes/phrasesCounter.js"),
-phraseBuilderRoutes             = require("./ES5/routes/phraseBuilder.js"),
-apiCreatorRoutes                = require("./ES5/routes/apiCreator.js"),
-wordExecRoutes                  = require("./ES5/routes/wordExec.js"),
+phraseBuilderRoutes                 = require("./ES5/routes/phraseBuilder.js"),
+apiCreatorRoutes                    = require("./ES5/routes/apiCreator.js"),
+wordExecRoutes                      = require("./ES5/routes/wordExec.js"),
+apiRequests                         = require("./ES5/routes/api/apiRequests/getStatus.js"),
 wordsInjectionRoutes                = require("./ES5/routes/wordsInjection.js");
 
 app.use("/phrasesCounter", phrasesCounterRoutes);
@@ -24,6 +25,7 @@ app.use("/wordExec", wordExecRoutes);
 app.use("/phraseBuilder", phraseBuilderRoutes);
 app.use("/apiCreator", apiCreatorRoutes);
 app.use("/wordsInjection", wordsInjectionRoutes);
+app.use("/apiStatus", apiRequests);
 
 // =====================
 // Setting the routes

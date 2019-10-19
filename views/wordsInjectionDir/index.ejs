@@ -88,15 +88,35 @@
             }
             return arr;
         }
+
+        
+        
+        
+        
    </script>
    
    
-   
+   <table class="table">
+       <thead>
+            <tr>
+                <th>RECEIVED</th>
+                <th>QUEUED</th>
+                <th>RUNNING</th>
+                <th>EXECUTING</th>
+            </tr>
+       </thead>
+       <tbody>
+            <tr>
+                <td id="recieved">0</td>
+                <td id="queued">0</td>
+                <td id="running">0</td>
+                <td id="executing">0</td>
+            </tr>
+       </tbody>
+   </table>
         
     <div class="container container-fluid">
         <h1>Adding Keywords to Mobile Action</h1>
-                
-
         <form class="form-group" action="/wordsInjection" method="POST" oninput='buildLink();'>
             <textarea class="form-control" name="keywords" placeholder="Enter a comma seperated list of keywords..." width="100%"></textarea>
             <ol>
@@ -152,5 +172,28 @@
 
 	<!--<script type="text/javascript" src="/scripts/apiCreator.js"></script>-->
 	
-	
+    <script>
+    function doAjax(){
+            var apiStatusRequest = new XMLHttpRequest();
+            apiStatusRequest.open('GET','/apiStatus',true);
+
+            apiStatusRequest.setRequestHeader("Content-type", "text/plain");
+            apiStatusRequest.onload = function(){
+                var data = JSON.parse(apiStatusRequest.responseText);
+                console.log(data);
+                $('#recieved').text(data.RECEIVED);
+                    $('#queued').text(data.QUEUED);
+                    $('#running').text(data.RUNNING);
+                    $('#executing').text(data.EXECUTING);
+                if (data.QUEUED > 0 || data.RUNNING > 0 || data.EXECUTING > 0){
+                    
+                    setTimeout(doAjax, 1000);
+                } 
+            }
+            return apiStatusRequest.send();
+            
+        }
+        
+        setTimeout(doAjax, 1000);
+    </script>
 <% include ../partials/footer.ejs %>

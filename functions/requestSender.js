@@ -3,7 +3,6 @@ var express = require("express"),
     regeneratorRuntime = require("regenerator-runtime"),
     app = express();
     
-import { makeApiCall } from './apiReqeusts';
 const limiter = new Bottleneck({
     maxConcurrent: 1,
     minTime: 1000
@@ -23,12 +22,11 @@ makeRequests.sendData = (urls) => {
                     'charset': 'utf-8',
                 }
             }));
-          const counts = limiter.counts();
-          console.log(counts);
       } catch(error) {
           console.log(error);
       }
     });
 }
 
-module.exports = makeRequests;
+makeRequests.getRequestsStatus = () => limiter.counts();
+module.exports = makeRequests ;
