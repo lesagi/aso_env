@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Naming Convention Generator</title>
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  <style>
+    div.radio-buttons>p {
+      display: inline;
+      margin-right: 10px;
+    }
+
+    div.input-field.col.s12.radio-buttons>p>label>span {
+      padding-left: 25px;
+    }
+    div.tabs-content.carousel.carousel-slider {
+      height: 800px;
+    }
+  </style>
+
+</head>
+
+<body>
+  <h1>Naming Convention Generator</h1>
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s3"><a href="#reports">Reports</a></li>
+        <li class="tab col s3"><a href="#abtests">AB Tests</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="reports">
+      <div class="row">
+        <div class="input-field col s12">
+          <input placeholder="i.e 'Apple Music'" id="client-name-report" type="text">
+          <label for="client-name-report">Client's Name</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+          <input placeholder="i.e '1'" id="report-number" type="text">
+          <label for="report-number">Report number:</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          <!-- Switch -->
+          <label for="is-first-report">First report?</label>
+          <span class="switch">
+            <label>
+              No
+              <input type="checkbox" id="is-first-report">
+              <span class="lever"></span>
+              Yes
+            </label>
+          </span>
+        </div>
+      </div>
+      <button type="submit" id="report-name-btn" name="action"
+        class="btn waves-effect waves-light btn-small deep-purple darken-1">Generate
+        Name!
+        <i class="material-icons left">send</i>
+      </button>
+
+    <h2 id="name-report"></h2>
+  </div>
+
+  <div id="abtests">
+      <div class="row">
+        <div class="input-field col s12">
+          <input placeholder="i.e 'Apple Music'" id="client-name-test" type="text">
+          <label for="client-name-test">Client's Name</label>
+        </div>
+      </div>
+
+      <div class="row">
+          <div class="input-field col s12">
+              <select id="num-of-versions">
+                <option value="" disabled selected>Num of Versions</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+              <label>Number of versions:</label>
+            </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+            <select id="page-type">
+              <option value="" disabled selected>Search/App Page</option>
+              <option value="SearchPage">Search Page</option>
+              <option value="AppPage">App Page</option>
+            </select>
+            <label>Page type:</label>
+          </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <label for="free-text">Free Text</label>
+        <input type="text" id="free-text" placeholder="Free Text">
+      </div>
+    </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <!-- <input placeholder="i.e 'October'" id="month" type="text"> -->
+          <label for="month">Month</label>
+          <input type="text" class="datepicker" id="month">
+        </div>
+      </div>
+      <div class="row">
+          <div class="input-field col s4 radio-buttons">
+              <p>
+                <label>
+                  <input name="os" type="radio" value="iOS" checked />
+                  <span>iOS</span>
+                </label>
+              </p>
+              <p>
+                <label>
+                  <input name="os" type="radio" value="Android" />
+                  <span>Android</span>
+                </label>
+              </p>
+            </div>
+        <div class="input-field col s4 radio-buttons">
+          <p>
+            <label>
+              <input type="checkbox" id="landscape" class="filled-in orientation" value="Landscape" />
+              <span>Landscape</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input type="checkbox" id="portrait" class="filled-in orientation" value="Portrait"/>
+              <span>Portrait</span>
+            </label>
+          </p>
+        </div>
+        <div class="input-field col s4 radio-buttons">
+          <p>
+            <label>
+              <input name="platform" type="radio" value="Splitmetrics" checked />
+              <span>Splitmetrics</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input name="platform" type="radio" value="Storemaven" />
+              <span>Storemaven</span>
+            </label>
+          </p>
+        </div>
+      </div>
+
+      <button type="submit" id="test-name-btn" name="action"
+        class="btn waves-effect waves-light btn-small deep-purple darken-1">Generate
+        Name!
+        <i class="material-icons left">send</i>
+      </button>
+
+    <h2 id="name-test"></h2>
+  </div>
+
+
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+<script>
+  $(document).ready(function(){
+    $('select').formSelect();
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.datepicker');
+    var instances = M.Datepicker.init(elems, {
+      "format": "mmmm",
+      "showClearBtn": true,
+      "autoClose": true
+    });
+  });
+
+  var tabs = $(".tabs");
+
+  var instance = M.Tabs.init(tabs, {
+    "swipeable": true
+  });
+
+  $(function () {
+    $("#report-name-btn").click(buildReportName);
+    $("#test-name-btn").click(buildTestName);
+  });
+
+
+  const buildReportName = () => {
+    let clientName = $("#client-name-report").val();
+    let reportNumber = $("#report-number").val();
+    let firstReport = document.querySelector("#is-first-report").checked;
+    $("#name-report").text(`${clientName} ASO - ${firstReport ? "Initial" : "Follow-up"} Report #${reportNumber}`);
+  }
+
+  const buildTestName = () => {
+    let clientName = $("#client-name-test").val();
+    let numOfVersions = $("select#num-of-versions option:selected").val();
+    let month = $("#month").val();
+    let os = $("input[name=os]").val();
+    let platform = $("input[name=platform]").val();
+    let versions = ['A','B','C','D','E'].slice(0,Number(numOfVersions)).join("");
+    let freeText = $("#free-text").val() + " ";
+    let checkboxes = document.querySelectorAll("input[type=checkbox].orientation:checked");
+    let orientation = checkboxes.length === 1 ? checkboxes[0].value + " " : 
+    checkboxes.length === 2 ? "Landscap vs. Portrait "  : "";
+    let pageType = $("#page-type").val();
+    $("#name-test").text(`${clientName} ${versions} Test ${pageType} ${freeText}${os} ${orientation}- ${month} ${platform}`);
+  }
+</script>
+
+</html>

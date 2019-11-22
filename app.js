@@ -53,6 +53,10 @@ app.get("/highlighter", function(req,res){
    res.render("highlightKeys/index"); 
 });
 
+app.get("/names-generator", function(req,res){
+    res.render("names-generator/index"); 
+ });
+
 // request("https://market.android.com/suggest/SuggRequest?json=1&c=3&query=forex B&hl=US&gl=en-US", function(err,res,body){
 //   var parsedData = JSON.parse(body);
 //   parsedData.forEach(function(){

@@ -176,17 +176,15 @@
     function doAjax(){
             var apiStatusRequest = new XMLHttpRequest();
             apiStatusRequest.open('GET','/apiStatus',true);
-
             apiStatusRequest.setRequestHeader("Content-type", "text/plain");
             apiStatusRequest.onload = function(){
                 var data = JSON.parse(apiStatusRequest.responseText);
                 console.log(data);
                 $('#recieved').text(data.RECEIVED);
-                    $('#queued').text(data.QUEUED);
-                    $('#running').text(data.RUNNING);
-                    $('#executing').text(data.EXECUTING);
+                $('#queued').text(data.QUEUED);
+                $('#running').text(data.RUNNING);
+                $('#executing').text(data.EXECUTING);
                 if (data.QUEUED > 0 || data.RUNNING > 0 || data.EXECUTING > 0){
-                    
                     setTimeout(doAjax, 1000);
                 } 
             }
