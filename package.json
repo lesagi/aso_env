@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./app.js",
     "build": "babel ./functions -d ./ES5/functions && babel ./routes -d ./ES5/routes",
-    "upload": "npm run build && npm start"
+    "deploy": "npm run build && npm start"
   },
   "author": "Sagi Levi",
   "license": "ISC",
@@ -29,7 +29,8 @@
     "nodemon": "^1.19.1",
     "regenerator-runtime": "^0.13.3",
     "request": "^2.83.0",
-    "request-promise": "^4.2.4"
+    "request-promise": "^4.2.4",
+    "cheerio": "^1.0.0-rc.3"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",

@@ -18,6 +18,7 @@ phraseBuilderRoutes                 = require("./ES5/routes/phraseBuilder.js"),
 apiCreatorRoutes                    = require("./ES5/routes/apiCreator.js"),
 wordExecRoutes                      = require("./ES5/routes/wordExec.js"),
 apiRequests                         = require("./ES5/routes/api/apiRequests/getStatus.js"),
+algoScraping                         = require("./ES5/routes/api/algoScraping.js"),
 wordsInjectionRoutes                = require("./ES5/routes/wordsInjection.js");
 
 app.use("/phrasesCounter", phrasesCounterRoutes);
@@ -26,6 +27,7 @@ app.use("/phraseBuilder", phraseBuilderRoutes);
 app.use("/apiCreator", apiCreatorRoutes);
 app.use("/wordsInjection", wordsInjectionRoutes);
 app.use("/apiStatus", apiRequests);
+app.use("/algoScraping", algoScraping);
 
 // =====================
 // Setting the routes
